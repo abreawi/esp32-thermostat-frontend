@@ -5,7 +5,9 @@
   --muted: #6d6359;
   --accent: #ff6a1a;
   --card: #ffffff;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.1), 0 4px 12px rgba(0, 0, 0, 0.06);
 }
 
 * {
@@ -43,9 +45,22 @@ body {
 
 .auth-card {
   background: var(--card);
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: var(--shadow);
+  border-radius: 24px;
+  padding: 40px 36px;
+  box-shadow: var(--shadow-lg);
+  border: 1px solid rgba(255, 106, 26, 0.06);
+  animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .auth-header {
@@ -54,15 +69,21 @@ body {
 }
 
 .auth-header h1 {
-  margin: 0 0 8px;
-  font-size: 28px;
+  margin: 0 0 10px;
+  font-size: 32px;
   font-weight: 700;
+  letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--ink) 0%, var(--muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
   margin: 0;
   color: var(--muted);
   font-size: 15px;
+  line-height: 1.6;
 }
 
 .auth-form {
@@ -93,54 +114,96 @@ body {
 }
 
 .form-group input {
-  padding: 12px 14px;
-  border: 1px solid #ddd;
-  border-radius: 10px;
+  padding: 13px 16px;
+  border: 1.5px solid #e5e0db;
+  border-radius: 12px;
   font-family: inherit;
   font-size: 15px;
-  transition: border-color 0.2s;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #fafafa;
+}
+
+.form-group input:hover {
+  border-color: #d4cec6;
+  background: #ffffff;
 }
 
 .form-group input:focus {
   outline: none;
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px rgba(255, 106, 26, 0.1);
+  box-shadow: 0 0 0 4px rgba(255, 106, 26, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
+  background: #ffffff;
+  transform: translateY(-1px);
 }
 
 .error-message {
   display: none;
   background: #ffebee;
   color: #c62828;
-  padding: 12px 14px;
-  border-radius: 10px;
+  padding: 14px 16px;
+  border-radius: 12px;
   font-size: 14px;
-  border: 1px solid #ef9a9a;
+  border: 1.5px solid #ef9a9a;
+  animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }
 
 .error-message.show {
   display: block;
 }
 
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+  20%, 40%, 60%, 80% { transform: translateX(4px); }
+}
+
 .primary-btn {
   border: none;
-  background: var(--accent);
+  background: linear-gradient(135deg, var(--accent) 0%, #ff8534 100%);
   color: #fff;
-  padding: 14px 20px;
+  padding: 15px 24px;
   border-radius: 12px;
   font-weight: 600;
   font-size: 16px;
   cursor: pointer;
   font-family: inherit;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(255, 106, 26, 0.25), 0 2px 4px rgba(255, 106, 26, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.primary-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.2) 0%, transparent 100%);
+  opacity: 0;
   transition: opacity 0.2s;
 }
 
 .primary-btn:hover {
-  opacity: 0.9;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 106, 26, 0.3), 0 3px 6px rgba(255, 106, 26, 0.2);
+}
+
+.primary-btn:hover::before {
+  opacity: 1;
+}
+
+.primary-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(255, 106, 26, 0.2);
 }
 
 .primary-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .form-toggle {
@@ -154,10 +217,23 @@ body {
   color: var(--accent);
   text-decoration: none;
   font-weight: 600;
+  transition: all 0.2s;
+  position: relative;
 }
 
-.form-toggle a:hover {
-  text-decoration: underline;
+.form-toggle a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--accent);
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.form-toggle a:hover::after {
+  width: 100%;
 }
 
 .loading-spinner {
