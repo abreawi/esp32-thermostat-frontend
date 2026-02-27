@@ -247,16 +247,22 @@ function connect() {
 }
 
 function handleMessage(topic, payload) {
+  console.log('📨 Mensaje recibido:', topic, '=', payload);
   try {
     if (topic === TOPICS.statusTempCurrent) {
+      console.log('🌡️ Temperatura actual:', payload);
       state.currentTemp = parseFloat(payload);
     } else if (topic === TOPICS.statusTempTarget) {
+      console.log('🎯 Temperatura objetivo:', payload);
       state.targetTemp = parseFloat(payload);
     } else if (topic === TOPICS.statusMode) {
+      console.log('⚙️ Modo:', payload);
       state.isManualMode = payload === "manual";
     } else if (topic === TOPICS.statusRelay) {
+      console.log('🔥 Relé:', payload);
       state.relayState = payload === "ON";
     } else if (topic === TOPICS.statusConfig) {
+      console.log('📋 Config completo recibido');
       const config = JSON.parse(payload);
       state.currentTemp = Number(config.currentTemp);
       state.targetTemp = Number(config.targetTemp);
