@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Login - Termostato ESP32</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/auth.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="auth-container">
+    <div class="auth-card">
+      <div class="auth-header">
+        <h1>🌡️ Termostato ESP32</h1>
+        <p class="subtitle">Control inteligente de temperatura</p>
+      </div>
+
+      <!-- Login Form -->
+      <form id="loginForm" class="auth-form">
+        <h2>Iniciar Sesión</h2>
+
+        <div class="form-group">
+          <label for="loginEmail">Email</label>
+          <input type="email" id="loginEmail" required placeholder="tu@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label for="loginPassword">Contraseña</label>
+          <input type="password" id="loginPassword" required placeholder="Tu contraseña" />
+        </div>
+
+        <div class="error-message" id="loginError"></div>
+
+        <button type="submit" class="primary-btn">Iniciar Sesión</button>
+
+        <div class="form-toggle">
+          ¿No tienes cuenta? <a href="#" id="showRegister">Regístrate aquí</a>
+        </div>
+      </form>
+
+      <!-- Register Form -->
+      <form id="registerForm" class="auth-form hidden">
+        <h2>Crear Cuenta</h2>
+
+        <div class="form-group">
+          <label for="registerName">Nombre</label>
+          <input type="text" id="registerName" required placeholder="Tu nombre" />
+        </div>
+
+        <div class="form-group">
+          <label for="registerEmail">Email</label>
+          <input type="email" id="registerEmail" required placeholder="tu@email.com" />
+        </div>
+
+        <div class="form-group">
+          <label for="registerPassword">Contraseña</label>
+          <input type="password" id="registerPassword" required placeholder="Mínimo 8 caracteres" />
+        </div>
+
+        <div class="form-group">
+          <label for="registerPasswordConfirm">Confirmar Contraseña</label>
+          <input type="password" id="registerPasswordConfirm" required placeholder="Repite tu contraseña" />
+        </div>
+
+        <div class="error-message" id="registerError"></div>
+
+        <button type="submit" class="primary-btn">Crear Cuenta</button>
+
+        <div class="form-toggle">
+          ¿Ya tienes cuenta? <a href="#" id="showLogin">Inicia sesión aquí</a>
+        </div>
+      </form>
+
+      <div class="loading-spinner" id="loadingSpinner"></div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

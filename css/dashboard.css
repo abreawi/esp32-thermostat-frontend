@@ -1,0 +1,381 @@
+:root {
+  --bg-1: #fff2e3;
+  --bg-2: #ffe4cc;
+  --ink: #1e1b16;
+  --muted: #6d6359;
+  --accent: #ff6a1a;
+  --accent-2: #1d8bfd;
+  --card: #ffffff;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+  --success: #2ecc71;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Space Grotesk", sans-serif;
+  color: var(--ink);
+  background: radial-gradient(circle at top left, var(--bg-1), #fff7ee 40%, var(--bg-2) 100%);
+  min-height: 100vh;
+}
+
+.bg-grid {
+  position: fixed;
+  inset: 0;
+  background-image: linear-gradient(rgba(255, 125, 35, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 125, 35, 0.08) 1px, transparent 1px);
+  background-size: 24px 24px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.app {
+  position: relative;
+  z-index: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 24px 20px 40px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: var(--card);
+  border-radius: 16px;
+  padding: 16px 20px;
+  box-shadow: var(--shadow);
+  margin-bottom: 24px;
+}
+
+.title-block h1 {
+  margin: 0 0 4px;
+  font-size: 24px;
+}
+
+.user-name {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+}
+
+.primary-btn,
+.secondary-btn {
+  border: none;
+  border-radius: 12px;
+  padding: 12px 18px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  transition: opacity 0.2s;
+}
+
+.primary-btn {
+  background: var(--accent);
+  color: #fff;
+}
+
+.secondary-btn {
+  background: var(--accent-2);
+  color: #fff;
+}
+
+.primary-btn:hover,
+.secondary-btn:hover {
+  opacity: 0.9;
+}
+
+.content {
+  margin-top: 24px;
+}
+
+.devices-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.devices-header h2 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.empty-state {
+  background: var(--card);
+  border-radius: 20px;
+  padding: 60px 32px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.empty-state .big-icon {
+  font-size: 80px;
+  margin-bottom: 16px;
+}
+
+.empty-state h3 {
+  margin: 0 0 8px;
+  font-size: 20px;
+}
+
+.empty-state p {
+  margin: 0 0 24px;
+  color: var(--muted);
+}
+
+.devices-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.device-card {
+  background: var(--card);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.device-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.12);
+}
+
+.device-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  margin-bottom: 12px;
+}
+
+.device-icon {
+  font-size: 36px;
+}
+
+.device-status {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.device-status.online {
+  color: var(--success);
+}
+
+.device-status.offline {
+  color: var(--muted);
+}
+
+.status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.device-name {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+
+.device-mac {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+  font-size: 12px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.device-actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.device-btn {
+  flex: 1;
+  border: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.control-btn {
+  background: var(--accent);
+  color: #fff;
+}
+
+.unclaim-btn {
+  background: #f5f5f5;
+  color: var(--muted);
+}
+
+.unclaim-btn:hover {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.loading-spinner {
+  display: none;
+  width: 40px;
+  height: 40px;
+  border: 4px solid rgba(255, 106, 26, 0.2);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 40px auto;
+}
+
+.loading-spinner.show {
+  display: block;
+}
+
+/* Modal Styles */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(30, 27, 22, 0.5);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-card {
+  background: #fff;
+  border-radius: 16px;
+  padding: 24px;
+  width: min(440px, 90vw);
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  font-size: 20px;
+}
+
+.close-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-size: 24px;
+  cursor: pointer;
+  padding: 0;
+  width: 32px;
+  height: 32px;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: var(--ink);
+}
+
+.modal-description {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 0 0 20px;
+  line-height: 1.5;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.form-group input {
+  padding: 12px 14px;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 15px;
+  transition: border-color 0.2s;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(255, 106, 26, 0.1);
+}
+
+.form-group small {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.error-message {
+  display: none;
+  background: #ffebee;
+  color: #c62828;
+  padding: 12px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  border: 1px solid #ef9a9a;
+  margin-bottom: 16px;
+}
+
+.error-message.show {
+  display: block;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+.modal-actions button {
+  flex: 1;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .devices-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .devices-grid {
+    grid-template-columns: 1fr;
+  }
+}

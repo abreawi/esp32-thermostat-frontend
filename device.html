@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Control - Termostato ESP32</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="app">
+    <header class="topbar">
+      <div class="title-block">
+        <button class="back-btn" id="backBtn" title="Volver">← Volver</button>
+        <h1 id="deviceTitle">Termostato ESP32</h1>
+        <div class="status-row">
+          <span class="status-dot" id="statusDot"></span>
+          <span class="status-text" id="statusText">Desconectado</span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="icon-btn" id="reconnectBtn" title="Reconectar" aria-label="Reconectar">⟳</button>
+      </div>
+    </header>
+
+    <nav class="tabs" id="tabs">
+      <button class="tab active" data-tab="control">Control</button>
+      <button class="tab" data-tab="schedule">Programación</button>
+    </nav>
+
+    <main class="content">
+      <section class="panel" id="connectionPanel">
+        <div class="connection-card">
+          <div class="big-icon" id="connectIcon">☁</div>
+          <h2 id="connectTitle">Sin conexión</h2>
+          <p id="connectMessage">No se pudo conectar al termostato ESP32</p>
+          <p class="mono" id="brokerLabel">Broker: broker.hivemq.com</p>
+          <div class="connection-actions">
+            <button class="primary-btn" id="retryBtn">Reintentar Conexión</button>
+            <div class="spinner" id="connectSpinner" aria-hidden="true"></div>
+          </div>
+          <div class="info-box">
+            <div class="info-title">Verifica que:</div>
+            <ul>
+              <li>El ESP32 esté encendido</li>
+              <li>El ESP32 esté conectado a WiFi</li>
+              <li>Tu teléfono tenga internet</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" id="controlPanel">
+        <div class="card">
+          <div class="card-title">Temperatura Actual</div>
+          <div class="temp-display">
+            <span id="currentTemp">22.0</span>
+            <span class="temp-unit">°C</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row">
+            <div>
+              <div class="card-title">Temperatura Deseada</div>
+            </div>
+            <div class="target-pill" id="targetTempLabel">22.0°C</div>
+          </div>
+          <div class="range-wrap">
+            <input type="range" id="targetSlider" min="15" max="30" step="0.5" value="22" />
+            <div class="range-tooltip" id="targetTooltip">22.0°C</div>
+          </div>
+          <div class="range-marks">
+            <span>15°C</span>
+            <span>18</span>
+            <span>20</span>
+            <span>22</span>
+            <span>24</span>
+            <span>26</span>
+            <span>28</span>
+            <span>30°C</span>
+          </div>
+        </div>
+
+        <div class="card relay" id="relayCard">
+          <div class="relay-icon" id="relayIcon">❄</div>
+          <div>
+            <div class="card-title">Calefacción</div>
+            <div class="relay-state" id="relayState">APAGADA</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="row">
+            <div>
+              <div class="card-title">Modo de Operación</div>
+              <div class="muted" id="modeLabel">Manual</div>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="modeSwitch" />
+              <span class="slider"></span>
+            </label>
+          </div>
+        </div>
+
+        <div class="info-box">
+          <div class="info-icon">i</div>
+          <div id="modeInfo">En modo manual, puedes ajustar la temperatura deseada libremente.</div>
+        </div>
+      </section>
+
+      <section class="panel" id="schedulePanel">
+        <div class="empty-state" id="emptySchedules">
+          <div class="calendar">📅</div>
+          <div>No hay programaciones</div>
+          <div class="muted">Toca el botón + para añadir</div>
+        </div>
+        <div class="schedule-list" id="scheduleList"></div>
+        <div class="schedule-actions">
+          <button class="secondary-btn" id="addScheduleBtn">Añadir Programación</button>
+          <button class="primary-btn" id="saveSchedulesBtn">Guardar Todo</button>
+        </div>
+      </section>
+    </main>
+
+    <div class="modal" id="timeModal" aria-hidden="true">
+      <div class="modal-card">
+        <div class="modal-header">
+          <button class="ghost-btn" id="cancelTimeBtn">Cancelar</button>
+          <div class="modal-title">Seleccionar Hora</div>
+          <button class="ghost-btn" id="confirmTimeBtn">Aceptar</button>
+        </div>
+        <div class="time-pickers">
+          <select id="hourPicker"></select>
+          <div class="colon">:</div>
+          <select id="minutePicker"></select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

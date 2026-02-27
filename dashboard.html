@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mis Dispositivos - Termostato ESP32</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/dashboard.css" />
+</head>
+<body>
+  <div class="bg-grid"></div>
+  <div class="app">
+    <header class="topbar">
+      <div class="title-block">
+        <h1>Mis Dispositivos</h1>
+        <p class="user-name" id="userName">Cargando...</p>
+      </div>
+      <div class="actions">
+        <button class="secondary-btn" id="logoutBtn">Cerrar Sesión</button>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="devices-header">
+        <h2>Termostatos</h2>
+        <button class="primary-btn" id="addDeviceBtn">+ Añadir Dispositivo</button>
+      </div>
+
+      <div class="empty-state" id="emptyState">
+        <div class="big-icon">🌡️</div>
+        <h3>No tienes dispositivos</h3>
+        <p>Añade tu primer termostato ESP32 para comenzar</p>
+        <button class="primary-btn" id="addDeviceBtnEmpty">Añadir Dispositivo</button>
+      </div>
+
+      <div class="devices-grid" id="devicesGrid"></div>
+
+      <div class="loading-spinner" id="loadingSpinner"></div>
+    </main>
+
+    <!-- Claim Device Modal -->
+    <div class="modal" id="claimModal">
+      <div class="modal-card">
+        <div class="modal-header">
+          <h3>Añadir Dispositivo</h3>
+          <button class="close-btn" id="closeModalBtn">✕</button>
+        </div>
+        <div class="modal-body">
+          <p class="modal-description">
+            Ingresa la dirección MAC de tu termostato ESP32. La encontrarás impresa en la carcasa del dispositivo.
+          </p>
+
+          <form id="claimForm">
+            <div class="form-group">
+              <label for="macAddress">Dirección MAC</label>
+              <input
+                type="text"
+                id="macAddress"
+                required
+                placeholder="AA:BB:CC:DD:EE:FF"
+                pattern="[0-9A-Fa-f:]{17}"
+                maxlength="17"
+              />
+              <small>Formato: AA:BB:CC:DD:EE:FF</small>
+            </div>
+
+            <div class="form-group">
+              <label for="deviceAlias">Nombre (opcional)</label>
+              <input
+                type="text"
+                id="deviceAlias"
+                placeholder="Ej: Sala, Dormitorio, Oficina"
+                maxlength="50"
+              />
+            </div>
+
+            <div class="error-message" id="claimError"></div>
+
+            <div class="modal-actions">
+              <button type="button" class="secondary-btn" id="cancelClaimBtn">Cancelar</button>
+              <button type="submit" class="primary-btn">Añadir</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/dashboard.js"></script>
+</body>
+</html>
