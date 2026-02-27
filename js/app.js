@@ -185,18 +185,18 @@ function updateTargetTooltip() {
   const min = Number(els.targetSlider.min);
   const max = Number(els.targetSlider.max);
   const val = Number(els.targetSlider.value);
-  const percent = ((val - min) / (max - min)) * 100;
 
   els.targetTooltip.textContent = `${formatTemp(val)}°C`;
 
-  // Calcular posición correcta del tooltip
-  const thumbWidth = window.innerWidth <= 720 ? 32 : 28;
-  const sliderWidth = els.targetSlider.offsetWidth;
-  const thumbHalf = thumbWidth / 2;
+  // Calcular el porcentaje del valor respecto al rango
+  const percent = ((val - min) / (max - min)) * 100;
 
-  // Posición en píxeles desde el borde izquierdo
-  const pixelPosition = (percent / 100) * (sliderWidth - thumbWidth) + thumbHalf;
-  els.targetTooltip.style.left = `${pixelPosition}px`;
+  // Ajustar para que el thumb esté centrado correctamente
+  // Los navegadores aplican un ajuste automático al slider
+  const adjustedPercent = percent;
+
+  // Posicionar usando porcentaje para que coincida con el slider nativo
+  els.targetTooltip.style.left = `${adjustedPercent}%`;
 }
 
 function connect() {
@@ -487,8 +487,24 @@ els.targetSlider.addEventListener("input", (e) => {
   updateTargetTooltip();
 });
 
+// Ajustar el valor al soltar para alinear con las marcas visuales
 els.targetSlider.addEventListener("change", (e) => {
-  setTargetTemperature(Number(e.target.value));
+  let value = Number(e.target.value);
+
+  // Si está muy cerca de un valor entero, ajustar a ese valor
+  const rounded = Math.round(value);
+  const diff = Math.abs(value - rounded);
+
+  // Si está a menos de 0.3 de un número entero, redondearlo
+  if (diff < 0.3) {
+    value = rounded;
+    e.target.value = value;
+    state.targetTemp = value;
+    els.targetTempLabel.textContent = `${formatTemp(value)}°C`;
+    updateTargetTooltip();
+  }
+
+  setTargetTemperature(value);
 });
 
 els.modeSwitch.addEventListener("change", (e) => {
