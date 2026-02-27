@@ -182,21 +182,30 @@ function updateUI() {
 }
 
 function updateTargetTooltip() {
-  const min = Number(els.targetSlider.min);
-  const max = Number(els.targetSlider.max);
-  const val = Number(els.targetSlider.value);
+  const slider = els.targetSlider;
+  const min = Number(slider.min);
+  const max = Number(slider.max);
+  const val = Number(slider.value);
 
   els.targetTooltip.textContent = `${formatTemp(val)}°C`;
 
-  // Calcular el porcentaje del valor respecto al rango
+  // Calcular posición real del thumb
   const percent = ((val - min) / (max - min)) * 100;
 
-  // Ajustar para que el thumb esté centrado correctamente
-  // Los navegadores aplican un ajuste automático al slider
-  const adjustedPercent = percent;
+  // Obtener el ancho del slider
+  const sliderWidth = slider.offsetWidth;
 
-  // Posicionar usando porcentaje para que coincida con el slider nativo
-  els.targetTooltip.style.left = `${adjustedPercent}%`;
+  // Tamaño del thumb
+  const thumbSize = window.innerWidth <= 720 ? 32 : 28;
+
+  // Calcular el espacio disponible para el movimiento del thumb
+  const availableWidth = sliderWidth - thumbSize;
+
+  // Posición del centro del thumb
+  const thumbCenter = (availableWidth * percent / 100) + (thumbSize / 2);
+
+  els.targetTooltip.style.left = `${thumbCenter}px`;
+  els.targetTooltip.style.transform = 'translateX(-50%)';
 }
 
 function connect() {
@@ -487,23 +496,9 @@ els.targetSlider.addEventListener("input", (e) => {
   updateTargetTooltip();
 });
 
-// Ajustar el valor al soltar para alinear con las marcas visuales
+// Ajustar el valor al soltar
 els.targetSlider.addEventListener("change", (e) => {
-  let value = Number(e.target.value);
-
-  // Si está muy cerca de un valor entero, ajustar a ese valor
-  const rounded = Math.round(value);
-  const diff = Math.abs(value - rounded);
-
-  // Si está a menos de 0.3 de un número entero, redondearlo
-  if (diff < 0.3) {
-    value = rounded;
-    e.target.value = value;
-    state.targetTemp = value;
-    els.targetTempLabel.textContent = `${formatTemp(value)}°C`;
-    updateTargetTooltip();
-  }
-
+  const value = Number(e.target.value);
   setTargetTemperature(value);
 });
 

@@ -273,7 +273,7 @@ button,
 .range-tooltip {
   position: absolute;
   bottom: -48px;
-  left: 50%;
+  left: 0;
   transform: translateX(-50%);
   background: #1e1b16;
   color: #fff;
@@ -285,7 +285,7 @@ button,
   pointer-events: none;
   box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
   z-index: 10;
-  transition: left 0.1s ease-out;
+  transition: left 0.08s ease-out, transform 0.08s ease-out;
 }
 
 .range-tooltip::after {
@@ -300,27 +300,20 @@ button,
 }
 
 .range-marks {
-  display: grid;
-  grid-template-columns: repeat(8, 1fr);
+  display: flex;
+  justify-content: space-between;
   margin-top: 16px;
   font-size: 13px;
   color: #4f453b;
   font-weight: 600;
   position: relative;
+  padding: 0;
 }
 
 .range-marks span {
   position: relative;
   padding-top: 12px;
-  text-align: center;
-}
-
-.range-marks span:first-child {
-  text-align: left;
-}
-
-.range-marks span:last-child {
-  text-align: right;
+  flex: 0 0 auto;
 }
 
 .range-marks span::before {
@@ -333,18 +326,6 @@ button,
   height: 8px;
   background: #bcaea0;
   border-radius: 2px;
-}
-
-/* Ajustar posición de las marcas extremas */
-.range-marks span:first-child::before {
-  left: 0;
-  transform: none;
-}
-
-.range-marks span:last-child::before {
-  left: auto;
-  right: 0;
-  transform: none;
 }
 
 input[type="range"] {
@@ -761,44 +742,52 @@ input[type="range"]:focus-visible {
   }
 
   .topbar {
-    padding: 16px;
-    gap: 0;
+    padding: 14px 16px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
   }
 
   .title-block {
-    width: 100%;
-    gap: 6px;
-  }
-
-  .title-block h1 {
-    font-size: 20px;
-    margin: 8px 0 6px 0;
-    line-height: 1.2;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 8px 12px;
+    align-items: center;
   }
 
   .back-btn {
-    font-size: 15px;
-    padding: 6px 0;
+    grid-column: 1;
+    grid-row: 1;
+    font-size: 14px;
+    padding: 0;
     min-height: auto;
-    display: inline-flex;
-    align-items: center;
-    margin-bottom: 0;
+    justify-self: start;
+  }
+
+  .title-block h1 {
+    grid-column: 1;
+    grid-row: 2;
+    font-size: 22px;
+    margin: 0;
+    line-height: 1.2;
   }
 
   .status-row {
-    font-size: 14px;
-    margin-top: 4px;
+    grid-column: 1;
+    grid-row: 3;
+    font-size: 13px;
   }
 
   .status-dot {
-    width: 9px;
-    height: 9px;
+    width: 8px;
+    height: 8px;
   }
 
   .actions {
-    position: absolute;
-    top: 16px;
-    right: 16px;
+    grid-column: 2;
+    grid-row: 1 / 4;
+    align-self: center;
   }
 
   .icon-btn {
@@ -864,12 +853,17 @@ input[type="range"]:focus-visible {
   }
 
   .range-marks {
-    font-size: 13px;
-    margin-top: 20px;
+    font-size: 12px;
+    margin-top: 18px;
   }
 
   .range-marks span {
     padding-top: 14px;
+  }
+
+  .range-marks span:nth-child(2),
+  .range-marks span:nth-child(7) {
+    font-size: 11px;
   }
 
   /* Switch más grande */
@@ -983,16 +977,23 @@ input[type="range"]:focus-visible {
   }
 
   .topbar {
-    padding: 14px 12px;
+    padding: 12px;
+  }
+
+  .title-block {
+    gap: 6px 10px;
+  }
+
+  .back-btn {
+    font-size: 13px;
   }
 
   .title-block h1 {
-    font-size: 18px;
+    font-size: 19px;
   }
 
-  .actions {
-    top: 14px;
-    right: 12px;
+  .status-row {
+    font-size: 12px;
   }
 
   .icon-btn {
@@ -1015,7 +1016,14 @@ input[type="range"]:focus-visible {
   }
 
   .range-marks {
-    font-size: 12px;
+    font-size: 11px;
+  }
+
+  .range-marks span:nth-child(2),
+  .range-marks span:nth-child(3),
+  .range-marks span:nth-child(6),
+  .range-marks span:nth-child(7) {
+    font-size: 10px;
   }
 
   .time-box {
