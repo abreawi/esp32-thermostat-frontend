@@ -8,12 +8,8 @@ const CONFIG = {
   // URL del backend en desarrollo (tu computadora)
   BACKEND_URL_DEV: 'http://localhost:3000/api',
 
-  // URL del backend en producción (cambiar cuando tengas backend público)
-  // Opciones:
-  // - Railway: https://tu-app.railway.app/api
-  // - Render: https://tu-app.onrender.com/api
-  // - Heroku: https://tu-app.herokuapp.com/api
-  BACKEND_URL_PROD: 'http://localhost:3000/api', // ← CAMBIAR cuando tengas backend público
+  // URL del backend en producción (Railway)
+  BACKEND_URL_PROD: 'https://esp32-thermostat-backend-production.up.railway.app/api',
 
   // URL actual según el entorno
   get BACKEND_URL() {
