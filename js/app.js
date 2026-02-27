@@ -199,6 +199,9 @@ function connect() {
   const brokerUrl = BROKER_URLS[activeBrokerIndex];
   els.brokerLabel.textContent = `Broker: ${brokerUrl.replace("wss://", "")}`;
 
+  console.log('🔌 Conectando a MQTT:', brokerUrl);
+  console.log('📋 Topic prefix:', TOPIC_PREFIX);
+
   client = mqtt.connect(brokerUrl, {
     clientId: `WebThermostat_${Date.now()}`,
     keepalive: 60,
@@ -207,6 +210,8 @@ function connect() {
   });
 
   client.on("connect", () => {
+    console.log('✅ MQTT conectado exitosamente');
+    console.log('📡 Suscribiendo a topics...');
     setConnectionState(true, "Conectado");
     client.subscribe([
       TOPICS.statusTempCurrent,
@@ -216,18 +221,22 @@ function connect() {
       TOPICS.statusConfig,
     ]);
 
+    console.log('✓ Suscrito a:', TOPICS.statusTempCurrent);
     client.publish(TOPICS.requestConfig, "get");
   });
 
   client.on("reconnect", () => {
+    console.log('🔄 Intentando reconectar MQTT...');
     setConnectionState(false, "Conectando...");
   });
 
   client.on("close", () => {
+    console.log('❌ MQTT desconectado');
     setConnectionState(false, "Desconectado");
   });
 
-  client.on("error", () => {
+  client.on("error", (error) => {
+    console.error('❌ Error MQTT:', error.message);
     setConnectionState(false, "Error de conexión");
   });
 
@@ -272,11 +281,16 @@ function handleMessage(topic, payload) {
 }
 
 function publish(topic, value) {
-  if (!client || !state.connected) return;
+  if (!client || !state.connected) {
+    console.warn('⚠️ No se puede publicar: MQTT no conectado');
+    return;
+  }
+  console.log('📤 Publicando:', topic, '=', value);
   client.publish(topic, value);
 }
 
 function setTargetTemperature(value) {
+  console.log('🌡️ Cambiar temperatura a:', value);
   publish(TOPICS.cmdTemp, value.toFixed(1));
 }
 
