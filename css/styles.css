@@ -111,15 +111,8 @@ button,
   position: relative;
 }
 
-.back-btn::before {
-  content: '←';
-  margin-right: 4px;
-  transition: transform 0.2s;
-  display: inline-block;
-}
-
-.back-btn:hover::before {
-  transform: translateX(-3px);
+.back-btn:hover {
+  text-decoration: underline;
 }
 
 .status-row {
@@ -437,12 +430,10 @@ input[type="range"]:focus-visible {
   color: #1b4b8a;
   border-radius: 14px;
   padding: 16px 18px;
-  display: flex;
-  gap: 14px;
-  align-items: center;
   font-size: 13px;
   border: 1px solid #d0e5ff;
   transition: all 0.2s;
+  text-align: left;
 }
 
 .info-box:hover {
@@ -451,28 +442,20 @@ input[type="range"]:focus-visible {
 }
 
 .info-box ul {
-  margin: 8px 0 0 16px;
+  margin: 8px 0 0 20px;
   padding: 0;
+  list-style: disc;
 }
 
 .info-box li {
-  margin-bottom: 4px;
-}
-
-.info-icon {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: #d9e7ff;
-  color: #1b4b8a;
-  display: grid;
-  place-items: center;
-  font-weight: 700;
+  margin-bottom: 6px;
+  line-height: 1.5;
 }
 
 .info-title {
   font-weight: 600;
-  margin-bottom: 4px;
+  margin-bottom: 8px;
+  font-size: 14px;
 }
 
 .connection-card {
@@ -778,8 +761,11 @@ input[type="range"]:focus-visible {
   }
 
   .back-btn {
-    font-size: 15px;
-    padding: 6px 0;
+    font-size: 16px;
+    padding: 8px 0;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
   }
 
   .actions {
@@ -912,14 +898,22 @@ input[type="range"]:focus-visible {
 
   /* Info box */
   .info-box {
-    font-size: 14px;
-    padding: 18px 20px;
+    font-size: 15px;
+    padding: 20px 22px;
   }
 
-  .info-icon {
-    width: 32px;
-    height: 32px;
-    font-size: 18px;
+  .info-title {
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .info-box ul {
+    margin: 10px 0 0 22px;
+  }
+
+  .info-box li {
+    margin-bottom: 8px;
+    font-size: 15px;
   }
 
   /* Modal */
