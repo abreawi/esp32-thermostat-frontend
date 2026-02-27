@@ -189,11 +189,25 @@ function updateTargetTooltip() {
 
   els.targetTooltip.textContent = `${formatTemp(val)}°C`;
 
-  // Calcular porcentaje del valor
-  const percent = ((val - min) / (max - min));
+  // Obtener las dimensiones reales del slider
+  const sliderRect = slider.getBoundingClientRect();
+  const sliderWidth = sliderRect.width;
 
-  // Usar porcentaje directo - el navegador lo alinea mejor
-  els.targetTooltip.style.left = `${percent * 100}%`;
+  // Tamaño del thumb (debe coincidir con CSS)
+  const thumbSize = window.innerWidth <= 720 ? 32 : 28;
+
+  // El rango de movimiento real del centro del thumb
+  const rangeWidth = sliderWidth - thumbSize;
+
+  // Porcentaje normalizado (0 a 1)
+  const percent = (val - min) / (max - min);
+
+  // Posición del centro del thumb desde el borde izquierdo
+  const position = (thumbSize / 2) + (rangeWidth * percent);
+
+  // Aplicar la posición
+  els.targetTooltip.style.left = `${position}px`;
+  els.targetTooltip.style.transform = 'translateX(-50%)';
 }
 
 function connect() {

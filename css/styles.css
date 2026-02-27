@@ -300,37 +300,33 @@ button,
 }
 
 .range-marks {
-  display: flex;
-  justify-content: space-between;
+  position: relative;
   margin-top: 16px;
+  height: 30px;
   font-size: 13px;
   color: #4f453b;
   font-weight: 600;
-  position: relative;
-  padding: 0;
 }
 
 .range-marks span {
-  position: relative;
-  padding-top: 12px;
+  position: absolute;
+  top: 12px;
+  transform: translateX(-50%);
+  white-space: nowrap;
 }
 
 .range-marks span:first-child {
-  text-align: left;
+  transform: translateX(0);
 }
 
 .range-marks span:last-child {
-  text-align: right;
-}
-
-.range-marks span:not(:first-child):not(:last-child) {
-  text-align: center;
+  transform: translateX(-100%);
 }
 
 .range-marks span::before {
   content: "";
   position: absolute;
-  top: 0;
+  top: -12px;
   left: 50%;
   transform: translateX(-50%);
   width: 2px;
@@ -764,24 +760,27 @@ input[type="range"]:focus-visible {
   }
 
   .topbar {
-    padding: 14px 16px 14px 16px;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 0;
-    position: relative;
+    padding: 16px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto auto;
+    gap: 8px;
+    align-items: start;
   }
 
   .title-block {
-    width: calc(100% - 60px);
+    grid-column: 1;
+    grid-row: 1 / 4;
     display: flex;
     flex-direction: column;
     gap: 6px;
+    padding-right: 12px;
   }
 
   .back-btn {
     font-size: 14px;
     padding: 0;
-    margin-bottom: 2px;
+    margin-bottom: 0;
   }
 
   .title-block h1 {
@@ -793,7 +792,6 @@ input[type="range"]:focus-visible {
 
   .status-row {
     font-size: 13px;
-    margin-top: 2px;
   }
 
   .status-dot {
@@ -802,9 +800,9 @@ input[type="range"]:focus-visible {
   }
 
   .actions {
-    position: absolute;
-    top: 14px;
-    right: 16px;
+    grid-column: 2;
+    grid-row: 1 / 4;
+    align-self: center;
   }
 
   .icon-btn {
@@ -870,12 +868,13 @@ input[type="range"]:focus-visible {
   }
 
   .range-marks {
-    font-size: 13px;
+    font-size: 12px;
     margin-top: 18px;
+    height: 35px;
   }
 
   .range-marks span {
-    padding-top: 14px;
+    top: 14px;
   }
 
   /* Hacer más pequeños los valores intermedios para evitar solapamiento */
@@ -883,13 +882,14 @@ input[type="range"]:focus-visible {
   .range-marks span:nth-child(3),
   .range-marks span:nth-child(6),
   .range-marks span:nth-child(7) {
-    font-size: 11px;
-    opacity: 0.8;
+    font-size: 10px;
+    opacity: 0.7;
   }
 
   .range-marks span:nth-child(4),
   .range-marks span:nth-child(5) {
-    font-size: 12px;
+    font-size: 11px;
+    opacity: 0.85;
   }
 
   /* Switch más grande */
@@ -1003,12 +1003,13 @@ input[type="range"]:focus-visible {
   }
 
   .topbar {
-    padding: 12px;
+    padding: 14px 12px;
+    gap: 6px;
   }
 
   .title-block {
-    width: calc(100% - 56px);
-    gap: 4px;
+    padding-right: 8px;
+    gap: 5px;
   }
 
   .back-btn {
@@ -1021,11 +1022,6 @@ input[type="range"]:focus-visible {
 
   .status-row {
     font-size: 12px;
-  }
-
-  .actions {
-    top: 12px;
-    right: 12px;
   }
 
   .icon-btn {
@@ -1048,20 +1044,26 @@ input[type="range"]:focus-visible {
   }
 
   .range-marks {
-    font-size: 12px;
+    font-size: 11px;
+    height: 32px;
+  }
+
+  .range-marks span {
+    top: 12px;
   }
 
   .range-marks span:nth-child(2),
   .range-marks span:nth-child(3),
   .range-marks span:nth-child(6),
   .range-marks span:nth-child(7) {
-    font-size: 10px;
-    opacity: 0.7;
+    font-size: 9px;
+    opacity: 0.6;
   }
 
   .range-marks span:nth-child(4),
   .range-marks span:nth-child(5) {
-    font-size: 11px;
+    font-size: 10px;
+    opacity: 0.75;
   }
 
   .time-box {
