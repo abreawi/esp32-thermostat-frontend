@@ -14,6 +14,7 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(255, 106, 26, 0.2);
 }
 
 body {
@@ -22,6 +23,19 @@ body {
   color: var(--ink);
   background: radial-gradient(circle at top left, var(--bg-1), #fff7ee 40%, var(--bg-2) 100%);
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
+}
+
+/* Prevenir selección accidental de texto en elementos de UI */
+button,
+.device-card,
+.device-btn {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .bg-grid {
@@ -466,20 +480,163 @@ body {
   }
 }
 
+/* Optimizaciones para Móvil */
 @media (max-width: 720px) {
+  .app {
+    padding: 20px 16px 40px;
+  }
+
   .topbar {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 14px;
+    padding: 18px 20px;
+  }
+
+  .title-block h1 {
+    font-size: 26px;
+  }
+
+  .user-name {
+    font-size: 15px;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    padding: 15px 24px;
+    font-size: 16px;
+    min-height: 52px;
+    width: 100%;
   }
 
   .devices-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 12px;
+    gap: 14px;
+  }
+
+  .devices-header h2 {
+    font-size: 21px;
+  }
+
+  .devices-header .primary-btn {
+    width: 100%;
   }
 
   .devices-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .device-card {
+    padding: 22px 20px;
+  }
+
+  .device-icon {
+    font-size: 40px;
+  }
+
+  .device-name {
+    font-size: 19px;
+  }
+
+  .device-mac {
+    font-size: 13px;
+  }
+
+  .device-status {
+    font-size: 13px;
+  }
+
+  .device-btn {
+    padding: 13px 16px;
+    font-size: 15px;
+    min-height: 48px;
+  }
+
+  .empty-state {
+    padding: 60px 32px;
+  }
+
+  .empty-state .big-icon {
+    font-size: 90px;
+  }
+
+  .empty-state h3 {
+    font-size: 22px;
+  }
+
+  .empty-state p {
+    font-size: 15px;
+  }
+
+  /* Modal */
+  .modal-card {
+    padding: 24px 20px;
+  }
+
+  .modal-header h3 {
+    font-size: 21px;
+  }
+
+  .close-btn {
+    width: 40px;
+    height: 40px;
+    font-size: 26px;
+  }
+
+  .modal-description {
+    font-size: 15px;
+  }
+
+  .form-group label {
+    font-size: 15px;
+  }
+
+  .form-group input {
+    padding: 15px 18px;
+    font-size: 16px;
+    min-height: 52px;
+  }
+
+  .form-group small {
+    font-size: 13px;
+  }
+
+  .error-message {
+    padding: 16px 18px;
+    font-size: 15px;
+  }
+
+  .modal-actions {
+    gap: 12px;
+    margin-top: 24px;
+  }
+
+  .modal-actions button {
+    min-height: 52px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 380px) {
+  .app {
+    padding: 16px 12px 32px;
+  }
+
+  .topbar {
+    padding: 16px;
+  }
+
+  .device-card {
+    padding: 20px 16px;
+  }
+
+  .empty-state {
+    padding: 48px 24px;
+  }
+
+  .modal-card {
+    padding: 20px 16px;
   }
 }

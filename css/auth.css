@@ -12,6 +12,7 @@
 
 * {
   box-sizing: border-box;
+  -webkit-tap-highlight-color: rgba(255, 106, 26, 0.2);
 }
 
 body {
@@ -24,6 +25,17 @@ body {
   align-items: center;
   justify-content: center;
   padding: 20px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  touch-action: manipulation;
+}
+
+/* Prevenir selección accidental de texto en elementos de UI */
+button {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .bg-grid {
@@ -257,12 +269,68 @@ body {
   }
 }
 
-@media (max-width: 480px) {
+/* Optimizaciones para Móvil */
+@media (max-width: 720px) {
+  body {
+    padding: 16px;
+  }
+
   .auth-card {
-    padding: 24px;
+    padding: 32px 24px;
+  }
+
+  .auth-header {
+    margin-bottom: 28px;
   }
 
   .auth-header h1 {
-    font-size: 24px;
+    font-size: 30px;
+  }
+
+  .subtitle {
+    font-size: 16px;
+  }
+
+  .auth-form {
+    gap: 20px;
+  }
+
+  .form-group label {
+    font-size: 15px;
+  }
+
+  .form-group input {
+    padding: 15px 18px;
+    font-size: 16px;
+    min-height: 52px;
+  }
+
+  .primary-btn {
+    padding: 17px 24px;
+    font-size: 17px;
+    min-height: 56px;
+  }
+
+  .form-toggle {
+    font-size: 15px;
+  }
+
+  .error-message {
+    padding: 16px 18px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 380px) {
+  .auth-card {
+    padding: 28px 20px;
+  }
+
+  .auth-header h1 {
+    font-size: 26px;
+  }
+
+  .subtitle {
+    font-size: 14px;
   }
 }

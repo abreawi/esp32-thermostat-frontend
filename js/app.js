@@ -186,8 +186,17 @@ function updateTargetTooltip() {
   const max = Number(els.targetSlider.max);
   const val = Number(els.targetSlider.value);
   const percent = ((val - min) / (max - min)) * 100;
+
   els.targetTooltip.textContent = `${formatTemp(val)}°C`;
-  els.targetTooltip.style.left = `calc(${percent}% + (${8 - percent * 0.16}px))`;
+
+  // Calcular posición correcta del tooltip
+  const thumbWidth = window.innerWidth <= 720 ? 32 : 28;
+  const sliderWidth = els.targetSlider.offsetWidth;
+  const thumbHalf = thumbWidth / 2;
+
+  // Posición en píxeles desde el borde izquierdo
+  const pixelPosition = (percent / 100) * (sliderWidth - thumbWidth) + thumbHalf;
+  els.targetTooltip.style.left = `${pixelPosition}px`;
 }
 
 function connect() {
@@ -525,6 +534,13 @@ els.tabs.addEventListener("click", (e) => {
   } else {
     els.controlPanel.classList.remove("active");
     els.schedulePanel.classList.add("active");
+  }
+});
+
+// Actualizar tooltip cuando se redimensiona la ventana
+window.addEventListener('resize', () => {
+  if (els.targetSlider) {
+    updateTargetTooltip();
   }
 });
 
