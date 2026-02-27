@@ -189,25 +189,33 @@ function updateTargetTooltip() {
 
   els.targetTooltip.textContent = `${formatTemp(val)}°C`;
 
-  // Obtener las dimensiones reales del slider
-  const sliderWidth = slider.getBoundingClientRect().width;
-
   // Porcentaje normalizado (0 a 1)
   const percent = (val - min) / (max - min);
 
   // Detectar si es móvil
   const isMobile = window.innerWidth <= 720;
 
-  // Tamaño visual del thumb (lo que ocupa realmente)
-  // En móvil: 32px total (24px + 4px border cada lado = 32px)
-  // En desktop: 28px total (22px + 3px border cada lado = 28px)
-  const thumbSize = isMobile ? 40 : 28;  // Aumentado para móvil
+  if (isMobile) {
+    // Para móvil: usar método simplificado con ajuste empírico
+    // Los navegadores móviles tienen comportamiento inconsistente con sliders
+    const sliderWidth = slider.offsetWidth;
 
-  // Calcular posición
-  const rangeWidth = sliderWidth - thumbSize;
-  const position = (thumbSize / 2) + (rangeWidth * percent);
+    // Ajuste empírico: el thumb en móvil parece tener ~16px de margen a cada lado
+    const edgeMargin = 16;
+    const usableWidth = sliderWidth - (edgeMargin * 2);
+    const position = edgeMargin + (usableWidth * percent);
 
-  els.targetTooltip.style.left = `${position}px`;
+    els.targetTooltip.style.left = `${position}px`;
+  } else {
+    // Para desktop: método preciso que funciona perfecto
+    const sliderWidth = slider.getBoundingClientRect().width;
+    const thumbSize = 28;
+    const rangeWidth = sliderWidth - thumbSize;
+    const position = (thumbSize / 2) + (rangeWidth * percent);
+
+    els.targetTooltip.style.left = `${position}px`;
+  }
+
   els.targetTooltip.style.transform = 'translateX(-50%)';
 }
 
