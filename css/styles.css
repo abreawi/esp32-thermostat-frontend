@@ -231,7 +231,7 @@ button,
   align-items: flex-start;
   justify-content: center;
   gap: 8px;
-  font-size: 72px;
+  font-size: 64px;
   font-weight: 700;
   margin-top: 16px;
   letter-spacing: -0.02em;
@@ -832,12 +832,22 @@ input[type="range"]:focus-visible {
   }
 
   .temp-display {
-    font-size: 80px;
-    margin-top: 20px;
+    font-size: 56px;
+    margin-top: 16px;
   }
 
   .temp-unit {
-    font-size: 40px;
+    font-size: 28px;
+  }
+
+  /* En móvil, poner temperatura y humedad una debajo de otra */
+  .card .row > div {
+    flex-direction: column;
+  }
+
+  .card .row {
+    flex-direction: column;
+    gap: 24px;
   }
 
   .target-pill {

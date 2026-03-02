@@ -13,6 +13,7 @@ const state = {
   connected: false,
   connecting: false,
   currentTemp: 22.0,
+  currentHumidity: 0.0,
   targetTemp: 22.0,
   isManualMode: true,
   relayState: false,
@@ -48,6 +49,7 @@ const els = {
   schedulePanel: document.getElementById("schedulePanel"),
   connectionPanel: document.getElementById("connectionPanel"),
   currentTemp: document.getElementById("currentTemp"),
+  currentHumidity: document.getElementById("currentHumidity"),
   targetTempLabel: document.getElementById("targetTempLabel"),
   targetSlider: document.getElementById("targetSlider"),
   targetTooltip: document.getElementById("targetTooltip"),
@@ -95,6 +97,7 @@ async function loadDeviceInfo() {
       cmdRelay: `${TOPIC_PREFIX}/command/relay`,
       statusTempCurrent: `${TOPIC_PREFIX}/status/temp_current`,
       statusTempTarget: `${TOPIC_PREFIX}/status/temp_target`,
+      statusHumidity: `${TOPIC_PREFIX}/status/humidity`,
       statusMode: `${TOPIC_PREFIX}/status/mode`,
       statusRelay: `${TOPIC_PREFIX}/status/relay`,
       statusConfig: `${TOPIC_PREFIX}/status/config`,
@@ -156,6 +159,7 @@ function temperatureColor(temp) {
 function updateUI() {
   els.currentTemp.textContent = formatTemp(state.currentTemp);
   els.currentTemp.style.color = temperatureColor(state.currentTemp);
+  els.currentHumidity.textContent = formatTemp(state.currentHumidity);
   els.targetTempLabel.textContent = `${formatTemp(state.targetTemp)}°C`;
   els.targetSlider.value = state.targetTemp;
   updateTargetTooltip();
@@ -245,6 +249,7 @@ function connect() {
     client.subscribe([
       TOPICS.statusTempCurrent,
       TOPICS.statusTempTarget,
+      TOPICS.statusHumidity,
       TOPICS.statusMode,
       TOPICS.statusRelay,
       TOPICS.statusConfig,
@@ -284,6 +289,9 @@ function handleMessage(topic, payload) {
     } else if (topic === TOPICS.statusTempTarget) {
       console.log('🎯 Temperatura objetivo:', payload);
       state.targetTemp = parseFloat(payload);
+    } else if (topic === TOPICS.statusHumidity) {
+      console.log('💧 Humedad actual:', payload);
+      state.currentHumidity = parseFloat(payload);
     } else if (topic === TOPICS.statusMode) {
       console.log('⚙️ Modo:', payload);
       state.isManualMode = payload === "manual";
