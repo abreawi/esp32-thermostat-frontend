@@ -170,19 +170,17 @@ button,
   color: var(--color-gray-500);
 }
 
-.status-dot {
+.status-row .status-dot {
   width: 10px;
   height: 10px;
-  border-radius: 50%;
-  background: var(--color-gray-700);
 }
 
-.status-dot.online {
+.status-row .status-dot.online {
   background: var(--color-success);
   box-shadow: 0 0 8px rgba(122, 155, 118, 0.6), 0 0 16px rgba(122, 155, 118, 0.3);
 }
 
-.status-dot.offline {
+.status-row .status-dot.offline {
   background: var(--color-gray-700);
 }
 
@@ -499,39 +497,86 @@ input[type="range"]:focus-visible {
   box-shadow: 0 0 0 3px rgba(255, 135, 92, 0.15);
 }
 
-.relay {
+/* Relay Card Base */
+.relay-card,
+.card.relay {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: 20px;
+  padding: 24px 32px;
 }
 
 .relay-icon {
-  font-size: 34px;
+  font-size: 36px;
+  width: 64px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(107, 114, 128, 0.1);
+  color: var(--color-gray-500);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .relay-state {
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 500;
   color: var(--color-gray-500);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Relay Card States */
-.card.relay-off {
-  background: var(--color-gray-100);
+/* Status Dot */
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-gray-700);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-.card.relay-on {
-  background: #FFF4ED;
+.status-dot.online {
+  background: var(--color-success);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+  animation: glow 2s ease-in-out infinite;
+}
+
+/* Relay ON State */
+.card.relay.active {
+  background: rgba(255, 135, 92, 0.12);
   border-left: 4px solid var(--color-coral);
+  box-shadow: var(--glass-shadow), 0 0 40px rgba(255, 135, 92, 0.15);
+}
+
+.card.relay.active .relay-icon {
+  background: rgba(255, 135, 92, 0.15);
+  color: var(--color-coral);
   animation: pulse 2s ease-in-out infinite;
 }
 
+.card.relay.active .relay-state {
+  color: var(--color-coral);
+  font-weight: 700;
+}
+
+/* Animations */
 @keyframes pulse {
   0%, 100% {
-    box-shadow: var(--shadow-md), 0 0 0 0 rgba(198, 123, 92, 0.4);
+    transform: scale(1);
+    opacity: 1;
   }
   50% {
-    box-shadow: var(--shadow-md), 0 0 0 8px rgba(198, 123, 92, 0);
+    transform: scale(1.05);
+    opacity: 0.9;
+  }
+}
+
+@keyframes glow {
+  0%, 100% {
+    box-shadow: 0 0 12px rgba(16, 185, 129, 0.6);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(16, 185, 129, 0.9);
   }
 }
 
