@@ -122,18 +122,15 @@ button,
 
 .title-block h1 {
   margin: 0 0 6px;
-  font-size: 28px;
+  font-size: 36px;
   font-weight: var(--font-weight-bold);
   letter-spacing: -0.01em;
-  background: linear-gradient(135deg, var(--color-black) 0%, var(--color-gray-700) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-black);
 }
 
 .user-name {
   margin: 0;
-  color: var(--color-gray-700);
+  color: var(--color-gray-500);
   font-size: 14px;
 }
 
@@ -193,7 +190,7 @@ button,
 
 .devices-header h2 {
   margin: 0;
-  font-size: 20px;
+  font-size: 28px;
   font-weight: var(--font-weight-semibold);
   color: var(--color-black);
 }

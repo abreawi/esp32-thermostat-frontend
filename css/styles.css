@@ -138,13 +138,10 @@ button,
 
 .title-block h1 {
   margin: 0;
-  font-size: 26px;
+  font-size: 36px;
   font-weight: var(--font-weight-bold);
   letter-spacing: -0.01em;
-  background: linear-gradient(135deg, var(--color-black) 0%, var(--color-gray-700) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  color: var(--color-black);
 }
 
 .back-btn {
@@ -286,6 +283,7 @@ button,
 .card-title {
   font-weight: 600;
   font-size: 16px;
+  color: var(--color-black);
 }
 
 .temp-display {
@@ -293,10 +291,11 @@ button,
   align-items: flex-start;
   justify-content: center;
   gap: 8px;
-  font-size: 56px;
-  font-weight: 700;
+  font-size: 64px;
+  font-weight: var(--font-weight-bold);
   margin-top: 16px;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.03em;
+  color: var(--color-coral);
   transition: color 0.3s;
   font-variant-numeric: tabular-nums;
 }
@@ -325,8 +324,9 @@ button,
 }
 
 .temp-unit {
-  font-size: 36px;
-  font-weight: 300;
+  font-size: 28px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-gray-500);
   margin-top: 4px;
 }
 
@@ -1027,7 +1027,7 @@ input[type="range"]:focus-visible {
   }
 
   .temp-display {
-    font-size: 48px;
+    font-size: 56px;
     margin-top: 16px;
   }
 
