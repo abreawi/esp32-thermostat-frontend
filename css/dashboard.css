@@ -521,7 +521,65 @@ button,
   }
 }
 
-/* Optimizaciones para Móvil */
+/* Grain Texture Overlay */
+.grain-texture {
+  position: fixed;
+  inset: 0;
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"><filter id="noiseFilter"><feTurbulence type="fractalNoise" baseFrequency="2" numOctaves="3" stitchTiles="stitch"/></filter><rect width="100%" height="100%" filter="url(%23noiseFilter)"/></svg>');
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Accessibility - Focus Styles */
+*:focus-visible {
+  outline: 2px solid var(--color-arcilla);
+  outline-offset: 2px;
+}
+
+/* Accessibility - Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Responsive Design - Tablet */
+@media (max-width: 768px) {
+  .app {
+    padding: 24px 18px 44px;
+  }
+
+  .topbar {
+    padding: 18px 24px;
+  }
+
+  .title-block h1 {
+    font-size: 25px;
+  }
+
+  .devices-grid {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 18px;
+  }
+
+  .primary-btn,
+  .secondary-btn {
+    padding: 14px 20px;
+    font-size: 15px;
+  }
+
+  .modal-card {
+    width: min(440px, 92vw);
+    padding: 26px;
+  }
+}
+
+/* Responsive Design - Mobile */
 @media (max-width: 720px) {
   .app {
     padding: 20px 16px 40px;
@@ -678,6 +736,47 @@ button,
   }
 }
 
+/* Responsive Design - Small Mobile */
+@media (max-width: 480px) {
+  .app {
+    padding: 18px 14px 36px;
+  }
+
+  .topbar {
+    padding: 16px 18px;
+    gap: 12px;
+  }
+
+  .title-block h1 {
+    font-size: 24px;
+  }
+
+  .devices-header h2 {
+    font-size: 20px;
+  }
+
+  .device-card {
+    padding: 20px 18px;
+  }
+
+  .device-icon {
+    font-size: 38px;
+  }
+
+  .device-name {
+    font-size: 18px;
+  }
+
+  .empty-state {
+    padding: 56px 28px;
+  }
+
+  .modal-card {
+    padding: 22px 18px;
+  }
+}
+
+/* Responsive Design - Extra Small Mobile */
 @media (max-width: 380px) {
   .app {
     padding: 16px 12px 32px;
