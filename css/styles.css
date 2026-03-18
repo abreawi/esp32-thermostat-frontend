@@ -1288,7 +1288,7 @@ input[type="range"]:focus-visible {
   }
 
   .temp-display {
-    font-size: 64px;
+    font-size: 48px;
   }
 
   .temp-unit {
