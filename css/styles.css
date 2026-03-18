@@ -51,8 +51,9 @@
 
 body {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
-  color: var(--ink);
+  font-family: var(--font-primary);
+  color: var(--color-tierra);
+  line-height: 1.6;
   background: radial-gradient(circle at top left, var(--bg-1), #fff7ee 40%, var(--bg-2) 100%);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
@@ -123,9 +124,9 @@ button,
 .title-block h1 {
   margin: 0;
   font-size: 26px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--ink) 0%, var(--muted) 100%);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, var(--color-tierra) 0%, var(--color-madera) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -171,25 +172,25 @@ button,
 
 .icon-btn {
   border: none;
-  background: #fff0e3;
-  color: var(--accent);
+  background: transparent;
+  color: var(--color-terracotta);
   font-size: 18px;
   padding: 10px 14px;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 6px rgba(255, 106, 26, 0.1);
+  border: 2px solid var(--color-terracotta);
+  min-width: 44px;
+  min-height: 44px;
 }
 
 .icon-btn:hover {
-  background: var(--accent);
-  color: #fff;
+  background: rgba(198, 123, 92, 0.08);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(255, 106, 26, 0.25);
 }
 
 .icon-btn:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 .tabs {
@@ -241,16 +242,17 @@ button,
 }
 
 .card {
-  background: var(--card);
-  border-radius: 20px;
+  background: var(--color-crema);
+  border-radius: var(--radius-lg);
   padding: 24px;
-  box-shadow: var(--shadow);
+  box-shadow: var(--shadow-md);
   margin-bottom: 20px;
-  border: 1px solid rgba(255, 106, 26, 0.06);
-  transition: box-shadow 0.3s;
+  border: 1px solid rgba(139, 115, 85, 0.12);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .card:hover {
+  transform: translateY(-2px);
   box-shadow: var(--shadow-lg);
 }
 
@@ -502,12 +504,12 @@ input[type="range"]:focus-visible {
 }
 
 .connection-card {
-  background: var(--card);
-  border-radius: 24px;
+  background: var(--color-crema);
+  border-radius: var(--radius-lg);
   padding: 40px 36px;
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--shadow-md);
   text-align: center;
-  border: 1px solid rgba(255, 106, 26, 0.06);
+  border: 1px solid rgba(139, 115, 85, 0.12);
 }
 
 .big-icon {
@@ -531,7 +533,7 @@ input[type="range"]:focus-visible {
 .primary-btn,
 .secondary-btn {
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-md);
   padding: 13px 22px;
   font-weight: 600;
   font-size: 15px;
@@ -541,33 +543,34 @@ input[type="range"]:focus-visible {
 }
 
 .primary-btn {
-  background: linear-gradient(135deg, var(--accent) 0%, #ff8534 100%);
+  background: var(--color-terracotta);
   color: #fff;
-  box-shadow: 0 4px 12px rgba(255, 106, 26, 0.25), 0 2px 4px rgba(255, 106, 26, 0.15);
+  box-shadow: var(--shadow-button);
 }
 
 .primary-btn:hover {
+  background: var(--color-arcilla);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 106, 26, 0.3), 0 3px 6px rgba(255, 106, 26, 0.2);
+  box-shadow: var(--shadow-button);
 }
 
 .primary-btn:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 .secondary-btn {
-  background: linear-gradient(135deg, var(--accent-2) 0%, #4fa3ff 100%);
-  color: #fff;
-  box-shadow: 0 4px 12px rgba(29, 139, 253, 0.25), 0 2px 4px rgba(29, 139, 253, 0.15);
+  background: transparent;
+  color: var(--color-terracotta);
+  border: 2px solid var(--color-terracotta);
 }
 
 .secondary-btn:hover {
+  background: rgba(198, 123, 92, 0.08);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(29, 139, 253, 0.3), 0 3px 6px rgba(29, 139, 253, 0.2);
 }
 
 .secondary-btn:active {
-  transform: translateY(0);
+  transform: scale(0.98);
 }
 
 .spinner {
@@ -586,11 +589,11 @@ input[type="range"]:focus-visible {
 }
 
 .schedule-card {
-  background: var(--card);
-  border-radius: 18px;
+  background: var(--color-crema);
+  border-radius: var(--radius-lg);
   padding: 20px;
-  box-shadow: var(--shadow);
-  border: 1px solid rgba(255, 106, 26, 0.06);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(139, 115, 85, 0.12);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 

@@ -45,8 +45,9 @@
 
 body {
   margin: 0;
-  font-family: "Space Grotesk", sans-serif;
-  color: var(--ink);
+  font-family: var(--font-primary);
+  color: var(--color-tierra);
+  line-height: 1.6;
   background: radial-gradient(circle at top left, var(--bg-1), #fff7ee 40%, var(--bg-2) 100%);
   min-height: 100vh;
   display: flex;
@@ -84,12 +85,18 @@ button {
 }
 
 .auth-card {
-  background: var(--card);
-  border-radius: 24px;
+  background: var(--color-crema);
+  border-radius: var(--radius-lg);
   padding: 40px 36px;
-  box-shadow: var(--shadow-lg);
-  border: 1px solid rgba(255, 106, 26, 0.06);
+  box-shadow: var(--shadow-md);
+  border: 1px solid rgba(139, 115, 85, 0.12);
   animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.auth-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
 }
 
 @keyframes slideUp {
@@ -111,9 +118,9 @@ button {
 .auth-header h1 {
   margin: 0 0 10px;
   font-size: 32px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  background: linear-gradient(135deg, var(--ink) 0%, var(--muted) 100%);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: -0.01em;
+  background: linear-gradient(135deg, var(--color-tierra) 0%, var(--color-madera) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -121,7 +128,7 @@ button {
 
 .subtitle {
   margin: 0;
-  color: var(--muted);
+  color: var(--color-madera);
   font-size: 15px;
   line-height: 1.6;
 }
@@ -139,7 +146,8 @@ button {
 .auth-form h2 {
   margin: 0 0 16px;
   font-size: 22px;
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-tierra);
 }
 
 .form-group {
@@ -149,41 +157,41 @@ button {
 }
 
 .form-group label {
-  font-weight: 600;
+  font-weight: var(--font-weight-medium);
   font-size: 14px;
+  color: var(--color-tierra);
 }
 
 .form-group input {
   padding: 13px 16px;
-  border: 1.5px solid #e5e0db;
+  border: 2px solid #E8DED3;
   border-radius: 12px;
   font-family: inherit;
   font-size: 15px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #fafafa;
+  background: #FFFFFF;
 }
 
 .form-group input:hover {
   border-color: #d4cec6;
-  background: #ffffff;
 }
 
 .form-group input:focus {
-  outline: none;
-  border-color: var(--accent);
-  box-shadow: 0 0 0 4px rgba(255, 106, 26, 0.08), 0 1px 2px rgba(0, 0, 0, 0.05);
-  background: #ffffff;
+  outline: 2px solid rgba(198, 123, 92, 0.2);
+  border-color: var(--color-terracotta);
+  box-shadow: none;
+  background: #FFFFFF;
   transform: translateY(-1px);
 }
 
 .error-message {
   display: none;
-  background: #ffebee;
+  background: rgba(181, 101, 29, 0.05);
   color: #c62828;
   padding: 14px 16px;
   border-radius: 12px;
   font-size: 14px;
-  border: 1.5px solid #ef9a9a;
+  border: 2px solid var(--color-arcilla);
   animation: shake 0.4s cubic-bezier(0.36, 0.07, 0.19, 0.97);
 }
 
@@ -199,7 +207,7 @@ button {
 
 .primary-btn {
   border: none;
-  background: linear-gradient(135deg, var(--accent) 0%, #ff8534 100%);
+  background: var(--color-terracotta);
   color: #fff;
   padding: 15px 24px;
   border-radius: 12px;
@@ -208,7 +216,7 @@ button {
   cursor: pointer;
   font-family: inherit;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 12px rgba(255, 106, 26, 0.25), 0 2px 4px rgba(255, 106, 26, 0.15);
+  box-shadow: var(--shadow-button);
   position: relative;
   overflow: hidden;
 }
@@ -226,8 +234,9 @@ button {
 }
 
 .primary-btn:hover {
+  background: var(--color-arcilla);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 106, 26, 0.3), 0 3px 6px rgba(255, 106, 26, 0.2);
+  box-shadow: var(--shadow-button);
 }
 
 .primary-btn:hover::before {
@@ -235,8 +244,8 @@ button {
 }
 
 .primary-btn:active {
-  transform: translateY(0);
-  box-shadow: 0 2px 8px rgba(255, 106, 26, 0.2);
+  transform: scale(0.98);
+  box-shadow: var(--shadow-button);
 }
 
 .primary-btn:disabled {
