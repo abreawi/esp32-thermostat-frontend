@@ -965,10 +965,13 @@ select:focus-visible {
 /* Responsive Design - Tablet */
 @media (max-width: 768px) {
   .app {
-    padding: 24px 18px 44px;
+    padding: 32px 20px 48px;
   }
 
   .topbar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
     padding: 18px 22px;
   }
 
@@ -986,11 +989,13 @@ select:focus-visible {
   }
 
   .card {
-    padding: 22px;
+    padding: 24px;
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
   }
 
   .temp-display {
-    font-size: 52px;
+    font-size: 56px;
   }
 
   .temp-unit {

@@ -575,10 +575,13 @@ select:focus-visible {
 /* Responsive Design - Tablet */
 @media (max-width: 768px) {
   .app {
-    padding: 24px 18px 44px;
+    padding: 32px 20px 48px;
   }
 
   .topbar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: stretch;
     padding: 18px 24px;
   }
 
@@ -587,8 +590,13 @@ select:focus-visible {
   }
 
   .devices-grid {
-    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-    gap: 18px;
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .device-card {
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
   }
 
   .primary-btn,
@@ -600,6 +608,8 @@ select:focus-visible {
   .modal-card {
     width: min(440px, 92vw);
     padding: 26px;
+    backdrop-filter: blur(10px) saturate(180%);
+    -webkit-backdrop-filter: blur(10px) saturate(180%);
   }
 }
 
