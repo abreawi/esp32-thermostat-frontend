@@ -551,8 +551,14 @@ button,
 
 /* Accessibility - Focus Styles */
 *:focus-visible {
-  outline: 2px solid var(--color-coral-hover);
+  outline: 3px solid var(--color-coral);
   outline-offset: 2px;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible {
+  box-shadow: 0 0 0 3px rgba(255, 135, 92, 0.15);
 }
 
 /* Accessibility - Reduced Motion */
