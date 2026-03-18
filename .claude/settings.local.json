@@ -1,0 +1,27 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(cd backend:*)",
+      "Bash(cd C:\\\\Users\\\\Abreawi\\\\Git\\\\led-controller-web-main\\\\backend:*)",
+      "Bash(npm:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(git push:*)",
+      "WebFetch(domain:wiki.elegoo.com)",
+      "Bash(pio run:*)",
+      "Bash(dir C:\\\\Users\\\\Abreawi\\\\Downloads\\\\dht11_example\\\\DHT11_Example:*)",
+      "Bash(rm:*)",
+      "Bash(curl:*)",
+      "Bash(platformio run:*)",
+      "WebFetch(domain:github.com)",
+      "Bash(npx get-shit-done-cc@latest:*)",
+      "Bash(uipro init:*)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "Bash(git clone:*)",
+      "Bash(winget install:*)",
+      "Bash(ccflare:*)",
+      "Bash(python3:*)",
+      "Bash(git:*)"
+    ]
+  }
+}

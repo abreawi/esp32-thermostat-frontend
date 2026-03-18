@@ -1,0 +1,250 @@
+ESP32 Thermostat Multi-User System - Complete Project Structure
+================================================================
+
+led-controller-web-main/
+│
+├── README.md                      # 📄 Documentación principal del proyecto
+├── QUICK_START.md                 # 🚀 Guía de inicio rápido
+├── IMPLEMENTATION_SUMMARY.md      # ✅ Resumen de implementación
+├── PROJECT_STRUCTURE.txt          # 📁 Este archivo
+├── setup.sh                       # 🔧 Script de instalación
+├── start-dev.sh                   # ▶️ Script para desarrollo
+│
+├── backend/                       # 🖥️ Backend API (Node.js + Express)
+│   │
+│   ├── .env                       # 🔐 Variables de entorno (JWT_SECRET, etc)
+│   ├── .gitignore                 # 📝 Archivos a ignorar en Git
+│   ├── package.json               # 📦 Dependencias y scripts npm
+│   ├── README.md                  # 📄 Documentación del backend
+│   ├── server.js                  # 🚪 Entry point del servidor
+│   │
+│   ├── database/                  # 💾 Base de datos SQLite
+│   │   ├── schema.sql             # 📋 Schema de la base de datos
+│   │   ├── init.js                # 🔨 Script de inicialización
+│   │   └── thermostat.db          # 🗄️ Base de datos (se crea con init.js)
+│   │
+│   └── src/                       # 📂 Código fuente
+│       │
+│       ├── config/                # ⚙️ Configuración
+│       │   ├── database.js        # 🔌 Conexión a SQLite
+│       │   └── mqtt.js            # 📡 Configuración MQTT
+│       │
+│       ├── middleware/            # 🛡️ Middleware
+│       │   ├── auth.js            # 🔐 Autenticación JWT
+│       │   └── errorHandler.js   # ❌ Manejo de errores
+│       │
+│       ├── models/                # 📊 Modelos de datos
+│       │   ├── User.js            # 👤 CRUD usuarios
+│       │   ├── Device.js          # 🌡️ CRUD dispositivos
+│       │   └── UserDevice.js      # 🔗 Relaciones usuario-dispositivo
+│       │
+│       ├── controllers/           # 🎮 Controladores (lógica de negocio)
+│       │   ├── authController.js  # 🔑 Login, registro
+│       │   ├── deviceController.js # 📱 Claim, listar, actualizar dispositivos
+│       │   └── mqttController.js  # 📨 Proxy MQTT
+│       │
+│       ├── routes/                # 🛣️ Rutas API
+│       │   ├── auth.js            # 🚪 /api/auth/*
+│       │   ├── devices.js         # 📱 /api/devices/*
+│       │   └── mqtt.js            # 📡 /api/mqtt/*
+│       │
+│       ├── services/              # 🔧 Servicios
+│       │   └── mqttService.js     # 📡 Singleton MQTT (subscripciones, publicaciones)
+│       │
+│       └── utils/                 # 🛠️ Utilidades
+│           ├── jwt.js             # 🎫 Helpers JWT (generar, verificar)
+│           └── macAddress.js      # 🔢 Validación y formato MAC
+│
+└── frontend/                      # 🌐 Frontend (HTML/CSS/JS)
+    │
+    ├── .gitignore                 # 📝 Archivos a ignorar
+    │
+    ├── index.html                 # 🔐 Página de Login/Registro
+    ├── dashboard.html             # 📋 Dashboard de dispositivos
+    ├── device.html                # 🎛️ Control de dispositivo
+    │
+    ├── css/                       # 🎨 Estilos
+    │   ├── auth.css               # 💅 Estilos login/registro
+    │   ├── dashboard.css          # 💅 Estilos dashboard
+    │   └── styles.css             # 💅 Estilos control dispositivo
+    │
+    └── js/                        # ⚡ JavaScript
+        ├── api.js                 # 🌐 Cliente API (fetch wrapper)
+        ├── auth.js                # 🔐 Lógica login/registro
+        ├── dashboard.js           # 📋 Lógica dashboard (listar, claim)
+        └── app.js                 # 🎛️ Lógica control dispositivo (MQTT)
+
+
+API ENDPOINTS
+=============
+
+Autenticación (/api/auth)
+├── POST   /register              # Registrar nuevo usuario
+├── POST   /login                 # Iniciar sesión
+└── GET    /me                    # Obtener usuario actual (protegido)
+
+Dispositivos (/api/devices) [TODOS PROTEGIDOS]
+├── POST   /claim                 # Reclamar dispositivo por MAC
+├── GET    /                      # Listar dispositivos del usuario
+├── GET    /:id                   # Obtener dispositivo específico
+├── PUT    /:id                   # Actualizar alias del dispositivo
+└── DELETE /:id/unclaim           # Desvincular dispositivo
+
+MQTT (/api/mqtt) [PROTEGIDO]
+└── POST   /publish               # Publicar mensaje MQTT
+
+WebSocket
+└── ws://localhost:3000?token=xxx # Updates en tiempo real
+
+
+MQTT TOPICS (por dispositivo)
+==============================
+
+Comandos (Web → ESP32)
+├── ESP32_AABBCCDDEEFF/command/temp      # Temperatura objetivo
+├── ESP32_AABBCCDDEEFF/command/mode      # Modo (manual/programado)
+├── ESP32_AABBCCDDEEFF/command/schedule  # Programaciones
+└── ESP32_AABBCCDDEEFF/command/relay     # Control relay
+
+Estado (ESP32 → Web)
+├── ESP32_AABBCCDDEEFF/status/temp_current  # Temperatura actual
+├── ESP32_AABBCCDDEEFF/status/temp_target   # Temperatura objetivo
+├── ESP32_AABBCCDDEEFF/status/mode          # Modo actual
+├── ESP32_AABBCCDDEEFF/status/relay         # Estado relay
+├── ESP32_AABBCCDDEEFF/status/config        # Config completa (JSON)
+└── ESP32_AABBCCDDEEFF/online               # Estado online/offline
+
+
+BASE DE DATOS (SQLite)
+======================
+
+users
+├── id (PRIMARY KEY)
+├── email (UNIQUE)
+├── password_hash (bcrypt)
+├── name
+└── created_at
+
+devices
+├── id (PRIMARY KEY)
+├── mac_address (UNIQUE)
+├── topic_prefix (ESP32_AABBCCDDEEFF)
+├── device_name
+├── is_online
+├── last_seen
+└── created_at
+
+user_devices (relación many-to-many)
+├── id (PRIMARY KEY)
+├── user_id (FK → users.id)
+├── device_id (FK → devices.id)
+├── device_alias (nombre personalizado)
+├── is_owner (primer usuario que lo reclama)
+├── claimed_at
+└── UNIQUE(user_id, device_id)
+
+
+TECNOLOGÍAS
+===========
+
+Backend:
+├── Node.js v18+
+├── Express.js (framework web)
+├── better-sqlite3 (base de datos)
+├── jsonwebtoken (autenticación)
+├── bcrypt (hashing passwords)
+├── mqtt (cliente MQTT)
+├── ws (WebSocket server)
+├── cors (CORS middleware)
+├── helmet (security headers)
+└── express-rate-limit (rate limiting)
+
+Frontend:
+├── HTML5
+├── CSS3 (Flexbox, Grid, Variables)
+├── JavaScript ES6+ (Fetch API, async/await)
+└── MQTT.js (cliente MQTT browser)
+
+
+FLUJO DE TRABAJO
+================
+
+1. SETUP
+   └── cd backend && npm install && npm run init-db
+
+2. DESARROLLO
+   ├── Terminal 1: cd backend && npm run dev
+   └── Terminal 2: cd frontend && python -m http.server 8080
+
+3. TESTING
+   ├── Abrir http://localhost:8080
+   ├── Registrarse
+   ├── Añadir dispositivo (MAC: AA:BB:CC:DD:EE:FF)
+   └── Controlar dispositivo
+
+4. PRODUCCIÓN
+   ├── Cambiar JWT_SECRET en .env
+   ├── Configurar dominio y HTTPS
+   ├── Deploy backend (Heroku, Railway, DigitalOcean)
+   └── Deploy frontend (Netlify, Vercel)
+
+
+SEGURIDAD
+=========
+
+✓ Passwords hasheados con bcrypt (10 rounds)
+✓ JWT con secret + expiración (7 días)
+✓ Middleware de autenticación en rutas protegidas
+✓ Validación de acceso a dispositivos
+✓ Queries SQL parametrizadas (previene injection)
+✓ Rate limiting en auth endpoints (10 req/15min)
+✓ CORS configurado
+✓ Helmet.js para headers de seguridad
+✓ Validación de entrada en todos los endpoints
+
+
+ESTADÍSTICAS
+============
+
+Total archivos:      41
+Líneas de código:    ~4,500
+Endpoints API:       11
+Páginas web:         3
+Tablas DB:           3
+Modelos:             3
+Controladores:       3
+Servicios:           1
+Middleware:          2
+
+
+PRÓXIMOS PASOS
+==============
+
+1. ✅ Instalación
+   cd backend && npm install && npm run init-db
+
+2. ✅ Configuración
+   Editar backend/.env con JWT_SECRET
+
+3. ✅ Desarrollo
+   Terminal 1: cd backend && npm run dev
+   Terminal 2: cd frontend && python -m http.server 8080
+
+4. ✅ Testing
+   Abrir http://localhost:8080
+
+5. 🚀 Producción
+   Ver README.md sección "Producción"
+
+
+RECURSOS
+========
+
+- README.md                → Documentación completa
+- QUICK_START.md          → Guía de inicio rápido (5 min)
+- IMPLEMENTATION_SUMMARY.md → Resumen técnico detallado
+- backend/README.md       → Documentación específica del backend
+- setup.sh                → Script de instalación automática
+- start-dev.sh            → Script para iniciar en desarrollo
+
+¡Proyecto completo y listo para usar! 🎉
