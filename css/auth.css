@@ -98,17 +98,20 @@ button {
 
 .auth-card {
   background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: var(--radius-lg);
   padding: 40px 36px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(139, 115, 85, 0.12);
+  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border);
   animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
 }
 
 .auth-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-4px) translateZ(0);
+  box-shadow: var(--glass-shadow-hover);
 }
 
 @keyframes slideUp {
@@ -454,5 +457,12 @@ button {
 
   .subtitle {
     font-size: 14px;
+  }
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(12px)) {
+  .auth-card {
+    background: rgba(255, 255, 255, 0.95);
   }
 }

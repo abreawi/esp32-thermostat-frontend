@@ -120,10 +120,13 @@ button,
   justify-content: space-between;
   align-items: center;
   background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: 20px;
   padding: 20px 28px;
-  box-shadow: var(--shadow-md);
-  border: 1px solid rgba(255, 106, 26, 0.06);
+  box-shadow: var(--glass-shadow);
+  border: 1px solid var(--glass-border);
+  transform: translateZ(0);
 }
 
 .title-block {
@@ -264,17 +267,20 @@ button,
 
 .card {
   background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
   border-radius: var(--radius-lg);
   padding: 24px;
-  box-shadow: var(--shadow-md);
+  box-shadow: var(--glass-shadow);
   margin-bottom: 20px;
-  border: 1px solid rgba(139, 115, 85, 0.12);
+  border: 1px solid var(--glass-border);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateZ(0);
 }
 
 .card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  transform: translateY(-6px) translateZ(0);
+  box-shadow: var(--glass-shadow-hover);
 }
 
 .card-title {
@@ -1296,5 +1302,12 @@ input[type="range"]:focus-visible {
   .time-box {
     min-width: 120px;
     font-size: 14px;
+  }
+}
+
+/* Fallback for browsers without backdrop-filter support */
+@supports not (backdrop-filter: blur(12px)) {
+  .card {
+    background: rgba(255, 255, 255, 0.95);
   }
 }
