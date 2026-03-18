@@ -302,6 +302,7 @@ function handleMessage(topic, payload) {
       console.log('📋 Config completo recibido');
       const config = JSON.parse(payload);
       state.currentTemp = Number(config.currentTemp);
+      state.currentHumidity = Number(config.currentHumidity) || 0;
       state.targetTemp = Number(config.targetTemp);
       state.isManualMode = config.mode === "manual";
       state.relayState = config.relayState === true;
