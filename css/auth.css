@@ -221,7 +221,7 @@ button {
   border: none;
   background: var(--color-coral);
   color: #fff;
-  padding: 15px 24px;
+  padding: 14px 28px;
   border-radius: 12px;
   font-weight: 600;
   font-size: 16px;
@@ -248,7 +248,7 @@ button {
 .primary-btn:hover {
   background: var(--color-coral-hover);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-coral);
+  box-shadow: 0 15px 40px rgba(255, 135, 92, 0.5);
 }
 
 .primary-btn:hover::before {
@@ -256,7 +256,7 @@ button {
 }
 
 .primary-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
   box-shadow: var(--shadow-coral);
 }
 
@@ -265,6 +265,28 @@ button {
   cursor: not-allowed;
   transform: none;
   box-shadow: none;
+}
+
+.secondary-btn {
+  border: 2px solid var(--color-coral);
+  background: transparent;
+  color: var(--color-coral);
+  padding: 14px 28px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.secondary-btn:hover {
+  background: rgba(255, 135, 92, 0.08);
+  transform: translateY(-2px);
+}
+
+.secondary-btn:active {
+  transform: scale(0.97);
 }
 
 .form-toggle {

@@ -138,7 +138,7 @@ button,
 .secondary-btn {
   border: none;
   border-radius: var(--radius-md);
-  padding: 13px 22px;
+  padding: 14px 28px;
   font-weight: 600;
   cursor: pointer;
   font-family: inherit;
@@ -161,20 +161,20 @@ button,
 .primary-btn:hover {
   background: var(--color-coral-hover);
   transform: translateY(-2px);
-  box-shadow: var(--shadow-coral);
+  box-shadow: 0 15px 40px rgba(255, 135, 92, 0.5);
 }
 
 .secondary-btn:hover {
-  background: rgba(198, 123, 92, 0.08);
+  background: rgba(255, 135, 92, 0.08);
   transform: translateY(-2px);
 }
 
 .primary-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
 .secondary-btn:active {
-  transform: scale(0.98);
+  transform: scale(0.97);
 }
 
 .content {
