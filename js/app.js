@@ -636,8 +636,9 @@ window.addEventListener('resize', () => {
 // Initialize
 function init() {
   setConnectionState(false, "Desconectado");
-  loadDeviceInfo();
+  // Update UI with persisted state first
   updateUI();
+  loadDeviceInfo();
 }
 
 init();
