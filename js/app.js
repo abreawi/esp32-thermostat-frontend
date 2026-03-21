@@ -61,8 +61,9 @@ function saveState() {
 // Pending commands queue (to resend on reconnect)
 let pendingCommands = [];
 
-// Flag to prevent MQTT from overwriting user's saved target temp on first load
-let ignoreNextTargetTempUpdate = (state.targetTemp !== 22.0);
+// Flag to track if we have a backend-persisted temperature
+// If true, ignore all MQTT temperature updates (user's temperature is authoritative)
+let hasBackendTargetTemp = false;
 
 let TOPIC_PREFIX = "";
 let TOPICS = {};
@@ -128,6 +129,14 @@ async function loadDeviceInfo() {
   try {
     const data = await api.getDevice(deviceId);
     state.device = data.device;
+
+    // Use target temperature from backend if available
+    if (state.device.target_temperature !== null && state.device.target_temperature !== undefined) {
+      state.targetTemp = state.device.target_temperature;
+      hasBackendTargetTemp = true; // Backend has authoritative temperature
+      console.log(`✓ Loaded target temperature from backend: ${state.targetTemp}°C`);
+      saveState(); // Save to localStorage as backup
+    }
 
     // Set topic prefix
     TOPIC_PREFIX = state.device.topic_prefix;
@@ -333,12 +342,14 @@ function handleMessage(topic, payload) {
       console.log('🌡️ Temperatura actual:', payload);
       state.currentTemp = parseFloat(payload);
     } else if (topic === TOPICS.statusTempTarget) {
-      console.log('🎯 Temperatura objetivo:', payload);
-      if (ignoreNextTargetTempUpdate) {
-        console.log('⏭️ Ignorando temperatura del ESP32, usando valor guardado');
-        ignoreNextTargetTempUpdate = false;
+      console.log('🎯 Temperatura objetivo recibida del ESP32:', payload);
+      if (hasBackendTargetTemp) {
+        console.log('⏭️ Ignorando temperatura del ESP32, usando temperatura del backend:', state.targetTemp);
+        // Backend has authoritative temperature, don't overwrite
       } else {
+        // No backend temperature, accept ESP32's value
         state.targetTemp = parseFloat(payload);
+        console.log('✓ Usando temperatura del ESP32:', state.targetTemp);
       }
     } else if (topic === TOPICS.statusHumidity) {
       console.log('💧 Humedad actual:', payload);
@@ -401,6 +412,7 @@ function resendPendingCommands() {
 async function setTargetTemperature(value) {
   console.log('🌡️ Cambiar temperatura a:', value);
   state.targetTemp = value;
+  hasBackendTargetTemp = true; // Mark that we have a backend temperature
   saveState();
 
   // Save to backend (persists across ESP32 deep sleep)
