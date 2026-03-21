@@ -343,15 +343,10 @@ function setMode(isManual) {
 }
 
 function setSchedules() {
-  const payload = JSON.stringify(state.schedules.map((sched) => ({
-    day: sched.day,
-    startHour: sched.startHour,
-    startMin: sched.startMin,
-    endHour: sched.endHour,
-    endMin: sched.endMin,
-    temp: sched.temp,
-  })));
-  publish(TOPICS.cmdSchedule, payload);
+  // NOTE: Schedule storage is now handled by backend API, not MQTT.
+  // Schedules are saved via POST /api/devices/:id/schedules
+  // This function is deprecated and should be removed when frontend is updated.
+  console.warn('setSchedules: This function is deprecated. Use backend API instead.');
 }
 
 function renderSchedules() {
@@ -538,6 +533,8 @@ els.addScheduleBtn.addEventListener("click", () => {
   updateUI();
 });
 
+// TODO: Update this to use backend API instead of MQTT
+// Should call: POST /api/devices/:deviceId/schedules for each schedule
 els.saveSchedulesBtn.addEventListener("click", () => {
   if (!state.schedules.length) return;
   setSchedules();
