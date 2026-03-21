@@ -50,6 +50,10 @@ El backend será responsable de:
 #### MQTTService
 - Añadir hook en `handleMessage()` para detectar `online: true`
 - Notificar a `ScheduleService` cuando un dispositivo despierta
+- **Nuevo:** Escuchar topic `command/mode` publicado por ESP32
+  - Cuando ESP32 publica su modo actual (manual/programado)
+  - Actualizar `devices.schedule_mode` en base de datos
+  - Esto mantiene sincronizado el modo entre ESP32 y backend
 
 ## Esquema de Base de Datos
 
@@ -90,7 +94,8 @@ ALTER TABLE devices ADD COLUMN schedule_mode VARCHAR(20) DEFAULT 'manual';
 
 **Nuevos campos:**
 - `last_scheduled_temp`: Última temperatura enviada por programación (para evitar duplicados)
-- `schedule_mode`: 'manual' o 'programado' (controla si el scheduler actúa)
+- `schedule_mode`: 'manual' (default) o 'programado' (controla si el scheduler actúa)
+  - **Default 'manual':** Protege dispositivos existentes durante migración
 
 ## Algoritmo de Evaluación
 
@@ -137,9 +142,12 @@ function evaluateActiveSchedule(schedules, currentTime) {
     // Caso especial: cruza medianoche (23:45 - 01:15)
     else {
       if (currentMinutes >= startMinutes || currentMinutes < endMinutes) {
-        if (startMinutes > latestStartTime) {
+        // Para schedules que cruzan medianoche, normalizar el startTime
+        // Ejemplo: 23:45 se trata como si fuera más reciente que 08:00
+        const normalizedStart = startMinutes >= 12 * 60 ? startMinutes : startMinutes + 24 * 60;
+        if (normalizedStart > latestStartTime) {
           activeSchedule = schedule;
-          latestStartTime = startMinutes;
+          latestStartTime = normalizedStart;
         }
       }
     }
@@ -190,7 +198,10 @@ function evaluateActiveSchedule(schedules, currentTime) {
 - start_min, end_min: 0, 15, 30, 45
 - start_hour, end_hour: 0-23
 - temperature: 15-30
-- Horario start < end (o validar medianoche)
+- **Horarios que cruzan medianoche:** Permitidos. Ejemplo: 23:45-01:15 es válido.
+  - No requiere validación especial: si `start > end` se interpreta como cruce de medianoche
+  - Rango mínimo: 15 minutos (evitar programaciones instantáneas)
+  - Rango máximo: 23 horas 45 minutos (evitar cubrir casi todo el día)
 
 **Response 201:**
 ```json
@@ -281,8 +292,12 @@ function evaluateActiveSchedule(schedules, currentTime) {
 
 **Modo programado/manual:**
 - Switch envía comando MQTT: `command/mode` = "manual" o "programado"
-- Backend escucha este topic y actualiza `devices.schedule_mode` en BD
+- ESP32 recibe el comando y actualiza su modo local
+- ESP32 publica su modo actual de vuelta (echo): `status/mode` = "manual" o "programado"
+- Backend escucha `status/mode` y actualiza `devices.schedule_mode` en BD
 - Scheduler solo actúa si `schedule_mode == 'programado'`
+
+**Nota:** El flujo es: Frontend → ESP32 → Backend. Esto asegura que el backend solo actúa cuando el ESP32 confirma el cambio de modo.
 
 ## Manejo de Errores
 
@@ -364,10 +379,19 @@ function evaluateActiveSchedule(schedules, currentTime) {
 - Usuario debe reconfigurar programaciones via frontend
 - Backend es nueva fuente de verdad
 
+### Modo Por Defecto en Migración
+- **IMPORTANTE:** Dispositivos existentes tendrán `schedule_mode = 'manual'` por defecto
+- Esto asegura que el backend NO interfiere con programaciones existentes en ESP32
+- Solo cuando usuario cambia explícitamente a modo "programado" en la app:
+  1. Backend comienza a evaluar programaciones
+  2. Si no hay programaciones en backend → no envía comandos (ESP32 mantiene control)
+  3. Usuario debe crear programaciones en frontend para que backend tome control
+
 ### Compatibilidad
 - ESP32 sigue aceptando comando `command/schedule` (retrocompatibilidad)
 - Backend NO usa este comando, solo envía `command/temp` directamente
 - Modo manual sigue funcionando igual
+- **Transición gradual:** Usuario puede migrar programaciones de forma incremental
 
 ## Dependencias
 
