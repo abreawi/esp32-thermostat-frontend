@@ -61,6 +61,9 @@ function saveState() {
 // Pending commands queue (to resend on reconnect)
 let pendingCommands = [];
 
+// Flag to prevent MQTT from overwriting user's saved target temp on first load
+let ignoreNextTargetTempUpdate = (state.targetTemp !== 22.0);
+
 let TOPIC_PREFIX = "";
 let TOPICS = {};
 
@@ -331,7 +334,12 @@ function handleMessage(topic, payload) {
       state.currentTemp = parseFloat(payload);
     } else if (topic === TOPICS.statusTempTarget) {
       console.log('🎯 Temperatura objetivo:', payload);
-      state.targetTemp = parseFloat(payload);
+      if (ignoreNextTargetTempUpdate) {
+        console.log('⏭️ Ignorando temperatura del ESP32, usando valor guardado');
+        ignoreNextTargetTempUpdate = false;
+      } else {
+        state.targetTemp = parseFloat(payload);
+      }
     } else if (topic === TOPICS.statusHumidity) {
       console.log('💧 Humedad actual:', payload);
       state.currentHumidity = parseFloat(payload);
