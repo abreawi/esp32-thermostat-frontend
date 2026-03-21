@@ -130,12 +130,21 @@ async function loadDeviceInfo() {
     const data = await api.getDevice(deviceId);
     state.device = data.device;
 
+    console.log('📦 Device data from backend:', {
+      id: state.device.id,
+      target_temperature: state.device.target_temperature,
+      alias: state.device.device_alias
+    });
+
     // Use target temperature from backend if available
     if (state.device.target_temperature !== null && state.device.target_temperature !== undefined) {
       state.targetTemp = state.device.target_temperature;
       hasBackendTargetTemp = true; // Backend has authoritative temperature
       console.log(`✓ Loaded target temperature from backend: ${state.targetTemp}°C`);
       saveState(); // Save to localStorage as backup
+      updateUI(); // Update UI immediately with backend value
+    } else {
+      console.log('⚠️ No target_temperature in backend response, using default:', state.targetTemp);
     }
 
     // Set topic prefix
