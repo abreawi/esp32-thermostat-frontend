@@ -467,7 +467,9 @@ function openTimeModal(schedule, isStart) {
     els.hourPicker.appendChild(opt);
   }
 
-  for (let i = 0; i < 60; i += 1) {
+  // Only allow 15-minute intervals (0, 15, 30, 45)
+  const allowedMinutes = [0, 15, 30, 45];
+  for (const i of allowedMinutes) {
     const opt = document.createElement("option");
     opt.value = i;
     opt.textContent = String(i).padStart(2, "0");
