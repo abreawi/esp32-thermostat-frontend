@@ -105,6 +105,13 @@ class APIClient {
     });
   }
 
+  async setTargetTemperature(id, temperature) {
+    return this.request(`/devices/${id}/target-temperature`, {
+      method: 'PUT',
+      body: JSON.stringify({ temperature })
+    });
+  }
+
   // MQTT endpoint
   async publishMQTT(device_id, topic, message) {
     return this.request('/mqtt/publish', {

@@ -398,10 +398,21 @@ function resendPendingCommands() {
   });
 }
 
-function setTargetTemperature(value) {
+async function setTargetTemperature(value) {
   console.log('🌡️ Cambiar temperatura a:', value);
   state.targetTemp = value;
   saveState();
+
+  // Save to backend (persists across ESP32 deep sleep)
+  try {
+    await api.setTargetTemperature(deviceId, value);
+    console.log('✓ Temperatura guardada en backend');
+  } catch (error) {
+    console.error('⚠ Error guardando temperatura en backend:', error);
+    // Continue anyway - will try MQTT
+  }
+
+  // Try to publish via MQTT (if ESP32 is awake)
   publish(TOPICS.cmdTemp, value.toFixed(1));
 }
 
@@ -581,9 +592,9 @@ els.targetSlider.addEventListener("input", (e) => {
 });
 
 // Ajustar el valor al soltar
-els.targetSlider.addEventListener("change", (e) => {
+els.targetSlider.addEventListener("change", async (e) => {
   const value = Number(e.target.value);
-  setTargetTemperature(value);
+  await setTargetTemperature(value);
 });
 
 els.modeSwitch.addEventListener("change", (e) => {
