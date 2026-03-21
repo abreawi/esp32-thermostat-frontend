@@ -8,18 +8,58 @@ if (!token || !deviceId) {
   window.location.href = 'index.html';
 }
 
+// Load persisted state from localStorage
+function loadPersistedState() {
+  const saved = localStorage.getItem(`deviceState_${deviceId}`);
+  if (saved) {
+    try {
+      const parsed = JSON.parse(saved);
+      return {
+        connected: false,
+        connecting: false,
+        currentTemp: parsed.currentTemp || 22.0,
+        currentHumidity: parsed.currentHumidity || 0.0,
+        targetTemp: parsed.targetTemp || 22.0,
+        isManualMode: parsed.isManualMode !== undefined ? parsed.isManualMode : true,
+        relayState: parsed.relayState || false,
+        schedules: parsed.schedules || [],
+        device: null
+      };
+    } catch (e) {
+      console.error('Error loading persisted state:', e);
+    }
+  }
+  return {
+    connected: false,
+    connecting: false,
+    currentTemp: 22.0,
+    currentHumidity: 0.0,
+    targetTemp: 22.0,
+    isManualMode: true,
+    relayState: false,
+    schedules: [],
+    device: null
+  };
+}
+
 // State
-const state = {
-  connected: false,
-  connecting: false,
-  currentTemp: 22.0,
-  currentHumidity: 0.0,
-  targetTemp: 22.0,
-  isManualMode: true,
-  relayState: false,
-  schedules: [],
-  device: null
-};
+const state = loadPersistedState();
+
+// Save state to localStorage
+function saveState() {
+  const toSave = {
+    currentTemp: state.currentTemp,
+    currentHumidity: state.currentHumidity,
+    targetTemp: state.targetTemp,
+    isManualMode: state.isManualMode,
+    relayState: state.relayState,
+    schedules: state.schedules
+  };
+  localStorage.setItem(`deviceState_${deviceId}`, JSON.stringify(toSave));
+}
+
+// Pending commands queue (to resend on reconnect)
+let pendingCommands = [];
 
 let TOPIC_PREFIX = "";
 let TOPICS = {};
@@ -257,6 +297,9 @@ function connect() {
 
     console.log('✓ Suscrito a:', TOPICS.statusTempCurrent);
     client.publish(TOPICS.requestConfig, "get");
+
+    // Resend pending commands
+    resendPendingCommands();
   });
 
   client.on("reconnect", () => {
@@ -326,15 +369,31 @@ function handleMessage(topic, payload) {
 
 function publish(topic, value) {
   if (!client || !state.connected) {
-    console.warn('⚠️ No se puede publicar: MQTT no conectado');
+    console.warn('⚠️ No se puede publicar: MQTT no conectado. Guardando para reenviar...');
+    // Save command to resend later
+    pendingCommands.push({ topic, value, timestamp: Date.now() });
     return;
   }
   console.log('📤 Publicando:', topic, '=', value);
   client.publish(topic, value);
 }
 
+// Resend pending commands after reconnection
+function resendPendingCommands() {
+  if (pendingCommands.length === 0) return;
+  console.log(`📨 Reenviando ${pendingCommands.length} comandos pendientes...`);
+  const toSend = [...pendingCommands];
+  pendingCommands = [];
+  toSend.forEach(cmd => {
+    console.log('🔄 Reenviando:', cmd.topic, '=', cmd.value);
+    client.publish(cmd.topic, cmd.value);
+  });
+}
+
 function setTargetTemperature(value) {
   console.log('🌡️ Cambiar temperatura a:', value);
+  state.targetTemp = value;
+  saveState();
   publish(TOPICS.cmdTemp, value.toFixed(1));
 }
 
