@@ -50,10 +50,11 @@ El backend será responsable de:
 #### MQTTService
 - Añadir hook en `handleMessage()` para detectar `online: true`
 - Notificar a `ScheduleService` cuando un dispositivo despierta
-- **Nuevo:** Escuchar topic `command/mode` publicado por ESP32
+- **Nuevo:** Escuchar topic `status/mode` publicado por ESP32
   - Cuando ESP32 publica su modo actual (manual/programado)
   - Actualizar `devices.schedule_mode` en base de datos
   - Esto mantiene sincronizado el modo entre ESP32 y backend
+  - **Convención MQTT:** Backend publica comandos a `command/*`, ESP32 publica estado a `status/*`
 
 ## Esquema de Base de Datos
 
@@ -108,12 +109,17 @@ ALTER TABLE devices ADD COLUMN schedule_mode VARCHAR(20) DEFAULT 'manual';
 4. ScheduleService:
    a. Buscar device por topic_prefix
    b. Verificar schedule_mode == 'programado'
+      - Si schedule_mode != 'programado': **salir sin procesar** (log debug, no error)
+      - Esto permite que el usuario controle el dispositivo manualmente
    c. Obtener hora actual en Europe/Madrid
    d. Consultar programaciones activas para device_id y día actual
    e. Evaluar si hay programación activa en este momento
    f. Si temperatura cambió vs last_scheduled_temp:
       - Publicar comando MQTT: command/temp con QoS 1
       - Actualizar last_scheduled_temp en BD
+   g. Si NO hay programación activa y last_scheduled_temp != NULL:
+      - Limpiar last_scheduled_temp (set NULL)
+      - NO enviar comando de temperatura (usuario retoma control manual)
 ```
 
 ### Evaluación de Programaciones Activas
@@ -199,9 +205,27 @@ function evaluateActiveSchedule(schedules, currentTime) {
 - start_hour, end_hour: 0-23
 - temperature: 15-30
 - **Horarios que cruzan medianoche:** Permitidos. Ejemplo: 23:45-01:15 es válido.
-  - No requiere validación especial: si `start > end` se interpreta como cruce de medianoche
-  - Rango mínimo: 15 minutos (evitar programaciones instantáneas)
-  - Rango máximo: 23 horas 45 minutos (evitar cubrir casi todo el día)
+  - Detección: si `(start_hour * 60 + start_min) > (end_hour * 60 + end_min)` entonces cruza medianoche
+  - **Validación de duración:**
+    ```javascript
+    const startMinutes = start_hour * 60 + start_min;
+    const endMinutes = end_hour * 60 + end_min;
+    let duration;
+
+    if (startMinutes > endMinutes) {
+      // Cruza medianoche: suma hasta medianoche + tiempo después de medianoche
+      duration = (24 * 60 - startMinutes) + endMinutes;
+    } else {
+      // Normal: diferencia directa
+      duration = endMinutes - startMinutes;
+    }
+
+    // Validar:
+    if (duration < 15) return error("Duración mínima: 15 minutos");
+    if (duration > 23 * 60 + 45) return error("Duración máxima: 23h 45min");
+    ```
+  - Ejemplo válido: 23:45-01:15 → duración = 90 minutos ✓
+  - Ejemplo inválido: 23:50-23:55 → duración = 1445 minutos (>23h45m) ✗
 
 **Response 201:**
 ```json
