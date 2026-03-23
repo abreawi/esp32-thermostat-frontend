@@ -374,7 +374,15 @@ function handleMessage(topic, payload) {
       const config = JSON.parse(payload);
       state.currentTemp = Number(config.currentTemp);
       state.currentHumidity = Number(config.currentHumidity) || 0;
-      state.targetTemp = Number(config.targetTemp);
+
+      // NO sobrescribir temperatura si tenemos valor del backend
+      if (!hasBackendTargetTemp) {
+        state.targetTemp = Number(config.targetTemp);
+        console.log('✓ Usando temperatura del config ESP32:', state.targetTemp);
+      } else {
+        console.log('⏭️ Ignorando temperatura del config ESP32, usando backend:', state.targetTemp);
+      }
+
       state.isManualMode = config.mode === "manual";
       state.relayState = config.relayState === true;
       if (Array.isArray(config.schedules)) {
