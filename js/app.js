@@ -159,6 +159,7 @@ async function loadDeviceInfo() {
       cmdMode: `${TOPIC_PREFIX}/command/mode`,
       cmdSchedule: `${TOPIC_PREFIX}/command/schedule`,
       cmdRelay: `${TOPIC_PREFIX}/command/relay`,
+      cmdRelayToggle: `${TOPIC_PREFIX}/command/relay_toggle`,
       statusTempCurrent: `${TOPIC_PREFIX}/status/temp_current`,
       statusTempTarget: `${TOPIC_PREFIX}/status/temp_target`,
       statusHumidity: `${TOPIC_PREFIX}/status/humidity`,
@@ -676,15 +677,14 @@ els.toggleRelayBtn.addEventListener("click", () => {
     return;
   }
 
-  // Enviar comando toggle (el ESP32 cambiará el estado)
-  const newState = !state.relayState ? "ON" : "OFF";
-  console.log(`🔄 Enviando comando de toggle manual: ${newState}`);
+  // Enviar comando toggle (el ESP32 invertirá su estado actual)
+  console.log(`🔄 Enviando comando de toggle manual al ESP32`);
 
-  mqttClient.publish(TOPICS.cmdRelay, newState, { qos: 1 }, (err) => {
+  mqttClient.publish(TOPICS.cmdRelayToggle, "TOGGLE", { qos: 1 }, (err) => {
     if (err) {
-      console.error("✗ Error publicando comando relay:", err);
+      console.error("✗ Error publicando comando relay toggle:", err);
     } else {
-      console.log("✓ Comando relay enviado");
+      console.log("✓ Comando relay toggle enviado");
     }
   });
 
