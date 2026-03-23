@@ -677,14 +677,15 @@ els.toggleRelayBtn.addEventListener("click", () => {
     return;
   }
 
-  // Enviar comando toggle (el ESP32 invertirá su estado actual)
-  console.log(`🔄 Enviando comando de toggle manual al ESP32`);
+  // Enviar comando de sincronización (el ESP32 enviará un pulso físico)
+  console.log(`🔧 Enviando comando de sincronización del relé al ESP32`);
 
-  client.publish(TOPICS.cmdRelayToggle, "TOGGLE", { qos: 1 }, (err) => {
+  client.publish(TOPICS.cmdRelayToggle, "SYNC", { qos: 1 }, (err) => {
     if (err) {
-      console.error("✗ Error publicando comando relay toggle:", err);
+      console.error("✗ Error publicando comando de sincronización:", err);
     } else {
-      console.log("✓ Comando relay toggle enviado");
+      console.log("✓ Comando de sincronización enviado");
+      console.log("ℹ️ El relé físico recibirá un pulso para sincronizarse con el estado lógico");
     }
   });
 
