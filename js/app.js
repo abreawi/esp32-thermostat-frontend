@@ -100,6 +100,9 @@ const els = {
   relayCard: document.getElementById("relayCard"),
   relayIcon: document.getElementById("relayIcon"),
   relayState: document.getElementById("relayState"),
+  relayMenuBtn: document.getElementById("relayMenuBtn"),
+  relayMenuDropdown: document.getElementById("relayMenuDropdown"),
+  toggleRelayBtn: document.getElementById("toggleRelayBtn"),
   modeLabel: document.getElementById("modeLabel"),
   modeSwitch: document.getElementById("modeSwitch"),
   modeInfo: document.getElementById("modeInfo"),
@@ -659,6 +662,42 @@ els.retryBtn.addEventListener("click", () => {
 });
 
 els.reconnectBtn.addEventListener("click", () => connect());
+
+// Relay Menu Toggle
+els.relayMenuBtn.addEventListener("click", (e) => {
+  e.stopPropagation();
+  els.relayMenuDropdown.classList.toggle("show");
+});
+
+// Toggle Manual Relay
+els.toggleRelayBtn.addEventListener("click", () => {
+  if (!mqttClient || !mqttClient.connected) {
+    console.warn("⚠️ MQTT no conectado");
+    return;
+  }
+
+  // Enviar comando toggle (el ESP32 cambiará el estado)
+  const newState = !state.relayState ? "ON" : "OFF";
+  console.log(`🔄 Enviando comando de toggle manual: ${newState}`);
+
+  mqttClient.publish(TOPICS.cmdRelay, newState, { qos: 1 }, (err) => {
+    if (err) {
+      console.error("✗ Error publicando comando relay:", err);
+    } else {
+      console.log("✓ Comando relay enviado");
+    }
+  });
+
+  // Cerrar menú
+  els.relayMenuDropdown.classList.remove("show");
+});
+
+// Cerrar menú cuando se hace clic fuera
+document.addEventListener("click", (e) => {
+  if (!els.relayMenuBtn.contains(e.target) && !els.relayMenuDropdown.contains(e.target)) {
+    els.relayMenuDropdown.classList.remove("show");
+  }
+});
 
 els.tabs.addEventListener("click", (e) => {
   if (!e.target.classList.contains("tab")) return;
