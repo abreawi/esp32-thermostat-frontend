@@ -672,7 +672,7 @@ els.relayMenuBtn.addEventListener("click", (e) => {
 
 // Toggle Manual Relay
 els.toggleRelayBtn.addEventListener("click", () => {
-  if (!mqttClient || !mqttClient.connected) {
+  if (!client || !client.connected) {
     console.warn("⚠️ MQTT no conectado");
     return;
   }
@@ -680,7 +680,7 @@ els.toggleRelayBtn.addEventListener("click", () => {
   // Enviar comando toggle (el ESP32 invertirá su estado actual)
   console.log(`🔄 Enviando comando de toggle manual al ESP32`);
 
-  mqttClient.publish(TOPICS.cmdRelayToggle, "TOGGLE", { qos: 1 }, (err) => {
+  client.publish(TOPICS.cmdRelayToggle, "TOGGLE", { qos: 1 }, (err) => {
     if (err) {
       console.error("✗ Error publicando comando relay toggle:", err);
     } else {
